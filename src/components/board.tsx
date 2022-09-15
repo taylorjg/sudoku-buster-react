@@ -1,3 +1,5 @@
+import { SudokuPuzzle, stringsToDigits } from "logic/sudoku-puzzle"
+import { DigitDetails } from "logic/types"
 import { range } from "utils"
 import { StyledBoard } from "./board.styles"
 
@@ -8,6 +10,22 @@ const GRID_SQUARE_SIZE = (100 - 2 * GRID_LINE_THIN_WIDTH) / 9
 const DIGIT_FONT_SIZE = GRID_SQUARE_SIZE * 0.75
 const DIGIT_INITIAL_VALUE_COLOUR = "magenta"
 const DIGIT_SOLVED_VALUE_COLOUR = "black"
+
+const digits = stringsToDigits([
+  "28  3  45",
+  "5 4   6 2",
+  " 1 5 4 9 ",
+  "  28 34  ",
+  "8   7   3",
+  "  36 29  ",
+  " 4 1 5 2 ",
+  "1 5   7 4",
+  "63  4  19"
+])
+
+const initialValueIndices = digits.flatMap((digit, index) => digit === ' ' ? [] : [index])
+
+const SUDOKU_PUZZLE = new SudokuPuzzle(digits, initialValueIndices)
 
 const Board = () => {
 
@@ -41,12 +59,8 @@ const Board = () => {
     ))
   }
 
-  const renderDigit = (
-    row: number,
-    col: number,
-    digit: number,
-    isInitialValue: boolean
-  ): JSX.Element => {
+  const renderDigit = (digitDetails: DigitDetails): JSX.Element => {
+    const { row, col, digit, isInitialValue } = digitDetails
     const x = (col + .5) * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH
     const y = (row + .5) * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH
     const digitColour = isInitialValue ? DIGIT_INITIAL_VALUE_COLOUR : DIGIT_SOLVED_VALUE_COLOUR
@@ -64,12 +78,14 @@ const Board = () => {
     )
   }
 
+  const allDigitDetails = Array.from(SUDOKU_PUZZLE)
+  console.log(allDigitDetails)
+
   return (
     <StyledBoard viewBox="0 0 100 100">
       {renderHorizontalGridLines()}
       {renderVerticalGridLines()}
-      {renderDigit(0, 0, 1, true)}
-      {renderDigit(8, 8, 9, false)}
+      {allDigitDetails.map(renderDigit)}
     </StyledBoard>
   )
 }
