@@ -3,5 +3,5 @@ import App from "./App"
 
 test("basic render", () => {
   render(<App />)
-  expect(screen.getByRole("button", { name: "Scan" })).toBeInTheDocument()
+  expect(screen.getByText("Tap the big square to scan a puzzle")).toBeInTheDocument()
 })

@@ -27,7 +27,7 @@ const initialValueIndices = digits.flatMap((digit, index) => digit === ' ' ? [] 
 
 const SamplePuzzle = new SudokuPuzzle(digits, initialValueIndices)
 
-const Board = () => {
+export const Board = () => {
 
   const renderHorizontalGridLines = (): JSX.Element[] => {
     const ys = range(10)
@@ -90,5 +90,3 @@ const Board = () => {
     </StyledBoard>
   )
 }
-
-export default Board

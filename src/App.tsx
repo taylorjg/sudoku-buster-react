@@ -1,20 +1,20 @@
-import { Container, CssBaseline, Button } from "@mui/material"
-import Board from "components/board"
-import { StyledBoardWrapper, StyledButtons } from "./App.styles"
+import { useState } from "react"
+import { CssBaseline } from "@mui/material"
+import { Global } from "@emotion/react"
+import { GlobalStyles, StyledBoardWrapper } from "./App.styles"
+import { Board } from "components/board"
+import { MessagePanel, Messages } from "components/message-panel"
 
 const App = () => {
+  const [currentMessage] = useState(Messages.SCAN_MESSAGE)
   return (
     <>
       <CssBaseline />
-      <Container>
-        <StyledBoardWrapper>
-          <Board />
-          <StyledButtons>
-            <Button size="small" variant="contained">Scan</Button>
-            <Button size="small" variant="contained">Cancel</Button>
-          </StyledButtons>
-        </StyledBoardWrapper>
-      </Container>
+      <Global styles={GlobalStyles} />
+      <StyledBoardWrapper>
+        <Board />
+        <MessagePanel message={currentMessage} />
+      </StyledBoardWrapper>
     </>
   )
 }
