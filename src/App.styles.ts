@@ -10,7 +10,7 @@ export const GlobalStyles = css`
   }
 `
 
-export const StyledBoardWrapper = styled.div`
+export const StyledContent = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;

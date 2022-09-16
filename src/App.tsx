@@ -1,22 +1,28 @@
 import { useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
-import { GlobalStyles, StyledBoardWrapper } from "./App.styles"
+import { GlobalStyles, StyledContent } from "./App.styles"
+import { Frame } from "components/frame"
 import { Board } from "components/board"
 import { MessagePanel, Messages } from "components/message-panel"
 
-const App = () => {
+export const App = () => {
   const [currentMessage] = useState(Messages.SCAN_MESSAGE)
+
+  const onFrameClick = () => {
+    console.log("[onFrameClick]")
+  }
+
   return (
     <>
-      <CssBaseline />
       <Global styles={GlobalStyles} />
-      <StyledBoardWrapper>
-        <Board />
+      <CssBaseline />
+      <StyledContent>
+        <Frame onFrameClick={onFrameClick}>
+          <Board />
+        </Frame>
         <MessagePanel message={currentMessage} />
-      </StyledBoardWrapper>
+      </StyledContent>
     </>
   )
 }
-
-export default App
