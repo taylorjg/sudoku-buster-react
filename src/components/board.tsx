@@ -3,13 +3,13 @@ import { DigitDetails } from "logic/types"
 import { range } from "utils"
 import { StyledBoard } from "./board.styles"
 
-const GRID_LINE_COLOUR = "#888"
+const GRID_LINE_COLOUR = "#888888"
 const GRID_LINE_THIN_WIDTH = .5
 const GRID_LINE_THICK_WIDTH = GRID_LINE_THIN_WIDTH * 2
 const GRID_SQUARE_SIZE = (100 - 2 * GRID_LINE_THIN_WIDTH) / 9
 const DIGIT_FONT_SIZE = GRID_SQUARE_SIZE * 0.75
-const DIGIT_INITIAL_VALUE_COLOUR = "magenta"
-const DIGIT_SOLVED_VALUE_COLOUR = "black"
+const DIGIT_INITIAL_VALUE_COLOUR = "#FF00FF"
+const DIGIT_SOLVED_VALUE_COLOUR = "#000000"
 
 const digits = stringsToDigits([
   "28  3  45",
@@ -25,7 +25,7 @@ const digits = stringsToDigits([
 
 const initialValueIndices = digits.flatMap((digit, index) => digit === ' ' ? [] : [index])
 
-const SUDOKU_PUZZLE = new SudokuPuzzle(digits, initialValueIndices)
+const SamplePuzzle = new SudokuPuzzle(digits, initialValueIndices)
 
 const Board = () => {
 
@@ -33,7 +33,7 @@ const Board = () => {
     const ys = range(10)
     return ys.map(y => (
       <line
-        key={y}
+        key={`horizontal-grid-line-${y}`}
         x1="0"
         y1={y * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
         x2="100"
@@ -48,7 +48,7 @@ const Board = () => {
     const xs = range(10)
     return xs.map(x => (
       <line
-        key={x}
+        key={`vertical-grid-line-${x}`}
         x1={x * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
         y1="0"
         x2={x * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
@@ -66,6 +66,7 @@ const Board = () => {
     const digitColour = isInitialValue ? DIGIT_INITIAL_VALUE_COLOUR : DIGIT_SOLVED_VALUE_COLOUR
     return (
       <text
+        key={`digit-${row}:${col}`}
         x={x}
         y={y}
         fontSize={DIGIT_FONT_SIZE}
@@ -78,8 +79,8 @@ const Board = () => {
     )
   }
 
-  const allDigitDetails = Array.from(SUDOKU_PUZZLE)
-  console.log(allDigitDetails)
+  SamplePuzzle.solve()
+  const allDigitDetails = Array.from(SamplePuzzle)
 
   return (
     <StyledBoard viewBox="0 0 100 100">

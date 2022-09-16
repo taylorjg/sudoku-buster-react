@@ -42,7 +42,7 @@ export class SudokuPuzzle {
 
   solve() {
     const numSolutions = 2
-    const solutions = solve(this.digits, this.initialValueIndices, numSolutions)
+    const solutions = solve(this.digits, numSolutions)
     if (solutions.length === 1) {
       this.digits = solutions[0]
       return true
