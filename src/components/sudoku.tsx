@@ -1,7 +1,7 @@
-import { SudokuPuzzle, stringsToDigits } from "logic/sudoku-puzzle"
+import { SudokuPuzzle } from "logic/sudoku-puzzle"
 import { DigitDetails } from "logic/types"
 import { range } from "utils"
-import { StyledBoard } from "./board.styles"
+import { StyledSudoku } from "./sudoku.styles"
 
 const GRID_LINE_COLOUR = "#888888"
 const GRID_LINE_THIN_WIDTH = .5
@@ -11,23 +11,11 @@ const DIGIT_FONT_SIZE = GRID_SQUARE_SIZE * 0.75
 const DIGIT_INITIAL_VALUE_COLOUR = "#FF00FF"
 const DIGIT_SOLVED_VALUE_COLOUR = "#000000"
 
-const digits = stringsToDigits([
-  "28  3  45",
-  "5 4   6 2",
-  " 1 5 4 9 ",
-  "  28 34  ",
-  "8   7   3",
-  "  36 29  ",
-  " 4 1 5 2 ",
-  "1 5   7 4",
-  "63  4  19"
-])
+export type SudokuProps = {
+  sudoku: SudokuPuzzle
+}
 
-const initialValueIndices = digits.flatMap((digit, index) => digit === ' ' ? [] : [index])
-
-const SamplePuzzle = new SudokuPuzzle(digits, initialValueIndices)
-
-export const Board = () => {
+export const Sudoku: React.FC<SudokuProps> = ({ sudoku }) => {
 
   const renderHorizontalGridLines = (): JSX.Element[] => {
     const ys = range(10)
@@ -79,14 +67,13 @@ export const Board = () => {
     )
   }
 
-  SamplePuzzle.solve()
-  const allDigitDetails = Array.from(SamplePuzzle)
+  const allDigitDetails = Array.from(sudoku)
 
   return (
-    <StyledBoard viewBox="0 0 100 100">
+    <StyledSudoku viewBox="0 0 100 100">
       {renderHorizontalGridLines()}
       {renderVerticalGridLines()}
       {allDigitDetails.map(renderDigit)}
-    </StyledBoard>
+    </StyledSudoku>
   )
 }

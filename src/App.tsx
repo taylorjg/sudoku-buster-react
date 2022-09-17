@@ -1,25 +1,46 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 import { GlobalStyles, StyledContent } from "./App.styles"
 import { Version } from "components/version"
 import { Frame } from "components/frame"
 import { VideoCamera } from "components/video-camera"
-// import { CornersOverlay } from "components/corners-overlay"
-// import { Board } from "components/board"
-import { MessagePanel, Messages } from "components/message-panel"
+import { CornersOverlay } from "components/corners-overlay"
+import { Sudoku } from "components/sudoku"
+import { MessagePanel } from "components/message-panel"
+import { SamplePuzzle } from "sample-puzzle"
+
+enum Mode {
+  Initial,
+  Scanning,
+  Scanned
+}
+
+const MessageMap = new Map([
+  [Mode.Initial, "Tap the big square to scan a puzzle"],
+  [Mode.Scanning, "Tap the big square to cancel"],
+  [Mode.Scanned, "Tap the big square to start over"],
+])
 
 export const App = () => {
-  const [currentMessage] = useState(Messages.SCAN_MESSAGE)
-  const [showVideoCamera, setShowVideoCamera] = useState(false)
+  const [mode, setMode] = useState(Mode.Initial)
+  const frameCountRef = useRef(0)
 
   const onFrameClick = () => {
-    console.log("[onFrameClick]")
-    setShowVideoCamera(current => !current)
+    if (mode === Mode.Initial) {
+      setMode(Mode.Scanning)
+    } else {
+      setMode(Mode.Initial)
+      frameCountRef.current = 0
+    }
   }
 
   const onVideoFrame = (imageData: ImageData): void => {
-    console.log("[onVideoFrame]", imageData)
+    if (frameCountRef.current === 200) {
+      setMode(Mode.Scanned)
+    } else {
+      frameCountRef.current++
+    }
   }
 
   return (
@@ -29,10 +50,17 @@ export const App = () => {
       <Version />
       <StyledContent>
         <Frame onFrameClick={onFrameClick}>
-          {/* <Board /> */}
-          {showVideoCamera ? <VideoCamera onVideoFrame={onVideoFrame} /> : null}
+          {mode === Mode.Scanning && (
+            <>
+              <VideoCamera onVideoFrame={onVideoFrame} />
+              <CornersOverlay />
+            </>
+          )}
+          {mode === Mode.Scanned && (
+            <Sudoku sudoku={SamplePuzzle} />
+          )}
         </Frame>
-        <MessagePanel message={currentMessage} />
+        <MessagePanel message={MessageMap.get(mode)!} />
       </StyledContent>
     </>
   )
