@@ -7,7 +7,7 @@ import { Frame } from "components/frame"
 import { VideoCamera } from "components/video-camera"
 import { CornersOverlay } from "components/corners-overlay"
 import { Sudoku } from "components/sudoku"
-import { MessagePanel } from "components/message-panel"
+import { Message } from "components/message"
 import { SamplePuzzle } from "sample-puzzle"
 
 enum Mode {
@@ -23,8 +23,9 @@ const MessageMap = new Map([
 ])
 
 export const App = () => {
-  const [mode, setMode] = useState(Mode.Initial)
   const frameCountRef = useRef(0)
+  const [mode, setMode] = useState(Mode.Initial)
+  const message = MessageMap.get(mode)
 
   const onFrameClick = () => {
     if (mode === Mode.Initial) {
@@ -36,7 +37,7 @@ export const App = () => {
   }
 
   const onVideoFrame = (imageData: ImageData): void => {
-    if (frameCountRef.current === 200) {
+    if (frameCountRef.current === 500) {
       setMode(Mode.Scanned)
     } else {
       frameCountRef.current++
@@ -60,7 +61,8 @@ export const App = () => {
             <Sudoku sudoku={SamplePuzzle} />
           )}
         </Frame>
-        <MessagePanel message={MessageMap.get(mode)!} />
+        {message && <Message message={message} />}
+        
       </StyledContent>
     </>
   )
