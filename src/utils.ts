@@ -1,5 +1,5 @@
 export const range = (n: number) =>
   Array.from(Array(n).keys())
 
-export const nextFrame = () =>
+export const nextAnimationFrame = () =>
   new Promise(resolve => requestAnimationFrame(resolve))

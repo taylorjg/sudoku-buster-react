@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import { nextFrame } from "utils"
+import { nextAnimationFrame } from "utils"
 import { StyledVideoCamera } from "./video-camera.styles"
 
 export type VideoCameraProps = {
@@ -39,13 +39,14 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({ onVideoFrame }) => {
       videoElement.play()
       const offscreenCanvas = document.createElement("canvas")
       const ctx = offscreenCanvas.getContext("2d")
-      const { width, height } = videoRect
       if (ctx) {
+        const { width, height } = videoRect
+        const bounds: [number, number, number, number] = [0, 0, width, height]
         while (!stopLoopRef.current) {
-          ctx.drawImage(videoElement, 0, 0, width, height)
-          const imageData = ctx.getImageData(0, 0, width, height)
+          ctx.drawImage(videoElement, ...bounds)
+          const imageData = ctx.getImageData(...bounds)
           onVideoFrame(imageData)
-          await nextFrame()
+          await nextAnimationFrame()
         }
       }
     }
