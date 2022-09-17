@@ -1,6 +1,7 @@
 import { useRef, useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
+
 import { GlobalStyles, StyledContent } from "./App.styles"
 import { Version } from "components/version"
 import { Frame } from "components/frame"
@@ -8,6 +9,8 @@ import { VideoCamera } from "components/video-camera"
 import { CornersOverlay } from "components/corners-overlay"
 import { Sudoku } from "components/sudoku"
 import { Message } from "components/message"
+import { DiagnosticsButton } from "components/diagnostics-button"
+import { NerdyStatsButton } from "components/nerdy-stats-button"
 import { SamplePuzzle } from "sample-puzzle"
 
 enum Mode {
@@ -62,8 +65,9 @@ export const App = () => {
           )}
         </Frame>
         {message && <Message message={message} />}
-        
       </StyledContent>
+      <DiagnosticsButton />
+      <NerdyStatsButton />
     </>
   )
 }
