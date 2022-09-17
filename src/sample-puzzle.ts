@@ -12,7 +12,7 @@ const digits = stringsToDigits([
   "63  4  19"
 ])
 
-const initialValueIndices = digits.flatMap((digit, index) => digit === ' ' ? [] : [index])
+const initialValueIndices = digits.flatMap((digit, index) => digit === " " ? [] : [index])
 
 const SamplePuzzle = new SudokuPuzzle(digits, initialValueIndices)
 SamplePuzzle.solve()

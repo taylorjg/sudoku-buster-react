@@ -27,7 +27,7 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({ onVideoFrame }) => {
     const videoRect = videoElement.getBoundingClientRect()
     const constraints = {
       video: {
-        facingMode: 'environment',
+        facingMode: "environment",
         width: videoRect.width,
         height: videoRect.height
       }
