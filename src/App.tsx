@@ -40,7 +40,7 @@ export const App = () => {
   }
 
   const onVideoFrame = (imageData: ImageData): void => {
-    if (frameCountRef.current === 500) {
+    if (frameCountRef.current === 300) {
       setMode(Mode.Scanned)
     } else {
       frameCountRef.current++
