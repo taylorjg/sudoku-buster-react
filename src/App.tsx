@@ -39,6 +39,10 @@ export const App = () => {
     }
   }
 
+  const onCameraNotAvailable = (): void => {
+    setMode(Mode.Initial)
+  }
+
   const onVideoFrame = (imageData: ImageData): void => {
     if (frameCountRef.current === 300) {
       setMode(Mode.Scanned)
@@ -54,7 +58,10 @@ export const App = () => {
       case Mode.Scanning:
         return (
           <>
-            <VideoCamera onVideoFrame={onVideoFrame} />
+            <VideoCamera
+              onCameraNotAvailable={onCameraNotAvailable}
+              onVideoFrame={onVideoFrame}
+            />
             <CornersOverlay />
           </>
         )

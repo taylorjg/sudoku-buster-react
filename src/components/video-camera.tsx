@@ -4,12 +4,16 @@ import { StyledVideoCamera } from "./video-camera.styles"
 import { useToast } from "./use-toast"
 
 export type VideoCameraProps = {
+  onCameraNotAvailable: () => void
   onVideoFrame: (imageData: ImageData) => void
 }
 
-export const VideoCamera: React.FC<VideoCameraProps> = ({ onVideoFrame }) => {
+export const VideoCamera: React.FC<VideoCameraProps> = ({
+  onCameraNotAvailable,
+  onVideoFrame
+}) => {
 
-  const { renderToast, showError, showInfo } = useToast()
+  const { renderToast, showError } = useToast()
   const mediaStreamRef = useRef<MediaStream | undefined>(undefined)
   const stopLoopRef = useRef(false)
 
@@ -43,7 +47,6 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({ onVideoFrame }) => {
         mediaStreamRef.current = mediaStream
         videoElement.srcObject = mediaStream
         videoElement.play()
-        showInfo(`mediaStream.id: ${mediaStream.id}`)
         const offscreenCanvas = document.createElement("canvas")
         const ctx = offscreenCanvas.getContext("2d")
         if (ctx) {
@@ -66,8 +69,8 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({ onVideoFrame }) => {
           stopLoopRef.current = true
         }
       } finally {
-        const message = error instanceof Error ? error.message : String(error)
-        showError(message)
+        showError("Camera not available")
+        onCameraNotAvailable()
       }
     }
   }
