@@ -2,7 +2,7 @@
   "name": "sudoku-buster-react",
   "description": "TODO",
   "homepage": "https://taylorjg.github.io/sudoku-buster-react/",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
