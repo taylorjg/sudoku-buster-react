@@ -1,7 +1,29 @@
-import { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Alert, Snackbar, SnackbarOrigin, Slide, AlertColor } from "@mui/material"
 
-export const useToast = () => {
+type ToastContextType = {
+  showSuccess: (message: string) => void
+  showInfo: (message: string) => void
+  showWarning: (message: string) => void
+  showError: (message: string) => void
+}
+
+const nullImpl = (_message: string): void => { }
+
+const NullToastContext = {
+  showSuccess: nullImpl,
+  showInfo: nullImpl,
+  showWarning: nullImpl,
+  showError: nullImpl
+}
+
+const ToastContext = React.createContext<ToastContextType>(NullToastContext)
+
+export type ToastProviderProps = {
+  children: React.ReactNode
+}
+
+export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
 
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState("")
@@ -28,8 +50,9 @@ export const useToast = () => {
     vertical: "bottom"
   }
 
-  const renderToast = () => {
-    return (
+  return (
+    <ToastContext.Provider value={{ showSuccess, showInfo, showWarning, showError }}>
+      {children}
       <Snackbar
         open={open}
         autoHideDuration={5000}
@@ -41,14 +64,8 @@ export const useToast = () => {
           {message}
         </Alert>
       </Snackbar>
-    )
-  }
-
-  return {
-    renderToast,
-    showSuccess,
-    showInfo,
-    showWarning,
-    showError
-  }
+    </ToastContext.Provider>
+  )
 }
+
+export const useToast = () => useContext(ToastContext)

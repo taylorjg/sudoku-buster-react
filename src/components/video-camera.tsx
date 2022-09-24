@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import { nextAnimationFrame } from "utils"
 import { StyledVideoCamera } from "./video-camera.styles"
-import { useToast } from "./use-toast"
+import { useToast } from "./toast-provider"
 
 export type VideoCameraProps = {
   onCameraNotAvailable: () => void
@@ -13,15 +13,14 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({
   onVideoFrame
 }) => {
 
-  const { renderToast, showError } = useToast()
+  const { showError } = useToast()
   const mediaStreamRef = useRef<MediaStream | undefined>(undefined)
   const stopLoopRef = useRef(false)
 
   useEffect(() => {
     const cleanup = () => {
-      const mediaStream = mediaStreamRef.current
-      if (mediaStream) {
-        mediaStream.getVideoTracks().forEach(videoTrack => videoTrack.stop())
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getVideoTracks().forEach(videoTrack => videoTrack.stop())
         mediaStreamRef.current = undefined
         stopLoopRef.current = true
       }
@@ -42,10 +41,9 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({
           height: videoRect.height
         }
       }
-      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
-      if (mediaStream) {
-        mediaStreamRef.current = mediaStream
-        videoElement.srcObject = mediaStream
+      mediaStreamRef.current = await navigator.mediaDevices.getUserMedia(constraints)
+      if (mediaStreamRef.current) {
+        videoElement.srcObject = mediaStreamRef.current
         videoElement.play()
         const offscreenCanvas = document.createElement("canvas")
         const ctx = offscreenCanvas.getContext("2d")
@@ -62,9 +60,8 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({
       }
     } catch (error) {
       try {
-        const mediaStream = mediaStreamRef.current
-        if (mediaStream) {
-          mediaStream.getVideoTracks().forEach(videoTrack => videoTrack.stop())
+        if (mediaStreamRef.current) {
+          mediaStreamRef.current.getVideoTracks().forEach(videoTrack => videoTrack.stop())
           mediaStreamRef.current = undefined
           stopLoopRef.current = true
         }
@@ -76,9 +73,6 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({
   }
 
   return (
-    <>
-      <StyledVideoCamera playsInline ref={videoRef} />
-      {renderToast()}
-    </>
+    <StyledVideoCamera playsInline ref={videoRef} />
   )
 }

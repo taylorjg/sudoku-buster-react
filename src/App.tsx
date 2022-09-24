@@ -3,6 +3,7 @@ import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
 import { GlobalStyles, StyledContent } from "./App.styles"
+import { ToastProvider } from "components/toast-provider"
 import { Version } from "components/version"
 import { Frame } from "components/frame"
 import { VideoCamera } from "components/video-camera"
@@ -75,7 +76,7 @@ export const App = () => {
   }
 
   return (
-    <>
+    <ToastProvider>
       <Global styles={GlobalStyles} />
       <CssBaseline />
       <Version />
@@ -87,6 +88,6 @@ export const App = () => {
       </StyledContent>
       <DiagnosticsButton />
       <NerdyStatsButton />
-    </>
+    </ToastProvider>
   )
 }
