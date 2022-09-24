@@ -8,4 +8,5 @@ export const StyledFrame = styled.div`
   max-height: min(90vw, 90vh);
   border: 1px solid darkblue;
   cursor: pointer;
+  display: flex;
 `

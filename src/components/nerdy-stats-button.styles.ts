@@ -5,4 +5,5 @@ export const StyledNerdyStatsButton = styled.span`
   position: fixed;
   bottom: .25rem;
   right: .25rem;
+  cursor: pointer;
 `

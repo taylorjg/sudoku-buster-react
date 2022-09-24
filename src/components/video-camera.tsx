@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react"
 import { nextAnimationFrame } from "utils"
 import { StyledVideoCamera } from "./video-camera.styles"
+import { useToast } from "./use-toast"
 
 export type VideoCameraProps = {
   onVideoFrame: (imageData: ImageData) => void
@@ -8,7 +9,8 @@ export type VideoCameraProps = {
 
 export const VideoCamera: React.FC<VideoCameraProps> = ({ onVideoFrame }) => {
 
-  const mediaStreamRef = useRef<MediaStream>()
+  const { renderToast, showError, showInfo } = useToast()
+  const mediaStreamRef = useRef<MediaStream | undefined>(undefined)
   const stopLoopRef = useRef(false)
 
   useEffect(() => {
@@ -16,6 +18,7 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({ onVideoFrame }) => {
       const mediaStream = mediaStreamRef.current
       if (mediaStream) {
         mediaStream.getVideoTracks().forEach(videoTrack => videoTrack.stop())
+        mediaStreamRef.current = undefined
         stopLoopRef.current = true
       }
     }
@@ -24,35 +27,55 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({ onVideoFrame }) => {
 
   const videoRef = async (videoElement: HTMLVideoElement) => {
     if (!videoElement) return
-    const videoRect = videoElement.getBoundingClientRect()
-    const constraints = {
-      video: {
-        facingMode: "environment",
-        width: videoRect.width,
-        height: videoRect.height
-      }
-    }
-    const mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
-    if (mediaStream) {
-      mediaStreamRef.current = mediaStream
-      videoElement.srcObject = mediaStream
-      videoElement.play()
-      const offscreenCanvas = document.createElement("canvas")
-      const ctx = offscreenCanvas.getContext("2d")
-      if (ctx) {
-        const { width, height } = videoRect
-        const bounds: [number, number, number, number] = [0, 0, width, height]
-        while (!stopLoopRef.current) {
-          ctx.drawImage(videoElement, ...bounds)
-          const imageData = ctx.getImageData(...bounds)
-          onVideoFrame(imageData)
-          await nextAnimationFrame()
+    if (mediaStreamRef.current) return
+    try {
+      const videoRect = videoElement.getBoundingClientRect()
+      const constraints = {
+        video: {
+          crap: "toss",
+          facingMode: "environment",
+          width: videoRect.width,
+          height: videoRect.height
         }
+      }
+      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints)
+      if (mediaStream) {
+        mediaStreamRef.current = mediaStream
+        videoElement.srcObject = mediaStream
+        videoElement.play()
+        showInfo(`mediaStream.id: ${mediaStream.id}`)
+        const offscreenCanvas = document.createElement("canvas")
+        const ctx = offscreenCanvas.getContext("2d")
+        if (ctx) {
+          const { width, height } = videoRect
+          const bounds: [number, number, number, number] = [0, 0, width, height]
+          while (!stopLoopRef.current) {
+            ctx.drawImage(videoElement, ...bounds)
+            const imageData = ctx.getImageData(...bounds)
+            onVideoFrame(imageData)
+            await nextAnimationFrame()
+          }
+        }
+      }
+    } catch (error) {
+      try {
+        const mediaStream = mediaStreamRef.current
+        if (mediaStream) {
+          mediaStream.getVideoTracks().forEach(videoTrack => videoTrack.stop())
+          mediaStreamRef.current = undefined
+          stopLoopRef.current = true
+        }
+      } finally {
+        const message = error instanceof Error ? error.message : String(error)
+        showError(message)
       }
     }
   }
 
   return (
-    <StyledVideoCamera playsInline ref={videoRef} />
+    <>
+      <StyledVideoCamera playsInline ref={videoRef} />
+      {renderToast()}
+    </>
   )
 }

@@ -47,6 +47,26 @@ export const App = () => {
     }
   }
 
+  const renderFrameContent = () => {
+    switch (mode) {
+      case Mode.Initial:
+        return null
+      case Mode.Scanning:
+        return (
+          <>
+            <VideoCamera onVideoFrame={onVideoFrame} />
+            <CornersOverlay />
+          </>
+        )
+      case Mode.Scanned:
+        return (
+          <Sudoku sudoku={SamplePuzzle} />
+        )
+      default:
+        return null
+    }
+  }
+
   return (
     <>
       <Global styles={GlobalStyles} />
@@ -54,15 +74,7 @@ export const App = () => {
       <Version />
       <StyledContent>
         <Frame onFrameClick={onFrameClick}>
-          {mode === Mode.Scanning && (
-            <>
-              <VideoCamera onVideoFrame={onVideoFrame} />
-              <CornersOverlay />
-            </>
-          )}
-          {mode === Mode.Scanned && (
-            <Sudoku sudoku={SamplePuzzle} />
-          )}
+          {renderFrameContent()}
         </Frame>
         {message && <Message message={message} />}
       </StyledContent>

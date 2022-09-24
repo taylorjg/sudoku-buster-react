@@ -5,4 +5,5 @@ export const StyledDiagnosticsButton = styled.span`
   position: fixed;
   bottom: .25rem;
   left: .25rem;
+  cursor: pointer;
 `
