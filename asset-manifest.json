@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/sudoku-buster-react/static/js/main.3243a34c.js",
+    "main.js": "/sudoku-buster-react/static/js/main.e938ce3e.js",
     "index.html": "/sudoku-buster-react/index.html",
-    "main.3243a34c.js.map": "/sudoku-buster-react/static/js/main.3243a34c.js.map"
+    "main.e938ce3e.js.map": "/sudoku-buster-react/static/js/main.e938ce3e.js.map"
   },
   "entrypoints": [
-    "static/js/main.3243a34c.js"
+    "static/js/main.e938ce3e.js"
   ]
 }
