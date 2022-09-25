@@ -73,6 +73,7 @@ const unpackProcessImageResult = (ptr: number) => {
   const NUM_INT_FIELDS = 22
   const ptr32 = ptr / helloModule!.HEAP32.BYTES_PER_ELEMENT
   const data = helloModule!.HEAP32.slice(ptr32, ptr32 + NUM_INT_FIELDS)
+  console.log(data)
   const boundingBox = data.slice(0, 4)
   const image1 = unpackImage(data.slice(4, 8))
   const image2 = unpackImage(data.slice(8, 12))

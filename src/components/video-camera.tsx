@@ -32,13 +32,12 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({
     if (!videoElement) return
     if (mediaStreamRef.current) return
     try {
-      const videoRect = videoElement.getBoundingClientRect()
+      const { width, height } = videoElement.getBoundingClientRect()
       const constraints = {
         video: {
-          crap: "toss",
           facingMode: "environment",
-          width: videoRect.width,
-          height: videoRect.height
+          width,
+          height
         }
       }
       mediaStreamRef.current = await navigator.mediaDevices.getUserMedia(constraints)
@@ -46,9 +45,10 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({
         videoElement.srcObject = mediaStreamRef.current
         videoElement.play()
         const offscreenCanvas = document.createElement("canvas")
+        offscreenCanvas.width = width
+        offscreenCanvas.height = height
         const ctx = offscreenCanvas.getContext("2d")
         if (ctx) {
-          const { width, height } = videoRect
           const bounds: [number, number, number, number] = [0, 0, width, height]
           while (!stopLoopRef.current) {
             ctx.drawImage(videoElement, ...bounds)

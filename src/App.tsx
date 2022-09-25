@@ -2,6 +2,7 @@ import { useRef, useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
+import { BoundingBox, Corners, Contour } from "./types"
 import { findBoundingBox } from "logic/findBoundingBox"
 import { GlobalStyles, StyledContent } from "./App.styles"
 import { ToastProvider } from "components/toast-provider"
@@ -9,6 +10,7 @@ import { Version } from "components/version"
 import { Frame } from "components/frame"
 import { VideoCamera } from "components/video-camera"
 import { CornersOverlay } from "components/corners-overlay"
+import { DiagnosticsOverlay } from "components/diagnostics-overlay"
 import { Sudoku } from "components/sudoku"
 import { Message } from "components/message"
 import { DiagnosticsButton } from "components/diagnostics-button"
@@ -30,6 +32,9 @@ const MessageMap = new Map([
 export const App = () => {
   const frameCountRef = useRef(0)
   const [mode, setMode] = useState(Mode.Initial)
+  const [boundingBox, setBoundingBox] = useState<BoundingBox>({ x: 0, y: 0, width: 0, height: 0 })
+  const [corners, setCorners] = useState<Corners>([])
+  const [contour, setContour] = useState<Contour>([])
   const message = MessageMap.get(mode)
 
   const onFrameClick = () => {
@@ -47,12 +52,17 @@ export const App = () => {
 
   const onVideoFrame = (imageData: ImageData): void => {
     const result = findBoundingBox(imageData)
-    console.log("findBoundingBox result:", result)
-    if (frameCountRef.current === 300) {
-      setMode(Mode.Scanned)
-    } else {
-      frameCountRef.current++
+    if (result) {
+      const [x, y, width, height] = result.boundingBox
+      setBoundingBox({ x, y, width, height })
+      setCorners(result.corners as Corners)
+      setContour(result.contour as Contour)
     }
+    // if (frameCountRef.current === 300) {
+    //   setMode(Mode.Scanned)
+    // } else {
+    //   frameCountRef.current++
+    // }
   }
 
   const renderFrameContent = () => {
@@ -67,6 +77,11 @@ export const App = () => {
               onVideoFrame={onVideoFrame}
             />
             <CornersOverlay />
+            <DiagnosticsOverlay
+              boundingBox={boundingBox}
+              corners={corners}
+              contour={contour}
+            />
           </>
         )
       case Mode.Scanned:
