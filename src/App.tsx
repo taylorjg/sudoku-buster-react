@@ -2,6 +2,7 @@ import { useRef, useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
+import { findBoundingBox } from "logic/findBoundingBox"
 import { GlobalStyles, StyledContent } from "./App.styles"
 import { ToastProvider } from "components/toast-provider"
 import { Version } from "components/version"
@@ -45,6 +46,8 @@ export const App = () => {
   }
 
   const onVideoFrame = (imageData: ImageData): void => {
+    const result = findBoundingBox(imageData)
+    console.log("findBoundingBox result:", result)
     if (frameCountRef.current === 300) {
       setMode(Mode.Scanned)
     } else {
