@@ -1,10 +1,11 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
 import { BoundingBox, Corners, Contour } from "./types"
-import { findBoundingBox } from "logic/findBoundingBox"
+import { useProcessImage } from "./use-process-image"
 import { GlobalStyles, StyledContent } from "./App.styles"
+
 import { ToastProvider } from "components/toast-provider"
 import { Version } from "components/version"
 import { Frame } from "components/frame"
@@ -30,19 +31,18 @@ const MessageMap = new Map([
 ])
 
 export const App = () => {
-  const frameCountRef = useRef(0)
   const [mode, setMode] = useState(Mode.Initial)
   const [boundingBox, setBoundingBox] = useState<BoundingBox>({ x: 0, y: 0, width: 0, height: 0 })
   const [corners, setCorners] = useState<Corners>([])
   const [contour, setContour] = useState<Contour>([])
   const message = MessageMap.get(mode)
+  const { processImage } = useProcessImage()
 
   const onFrameClick = () => {
     if (mode === Mode.Initial) {
       setMode(Mode.Scanning)
     } else {
       setMode(Mode.Initial)
-      frameCountRef.current = 0
     }
   }
 
@@ -51,18 +51,13 @@ export const App = () => {
   }
 
   const onVideoFrame = (imageData: ImageData): void => {
-    const result = findBoundingBox(imageData)
+    const result = processImage(imageData)
     if (result) {
       const [x, y, width, height] = result.boundingBox
       setBoundingBox({ x, y, width, height })
       setCorners(result.corners as Corners)
       setContour(result.contour as Contour)
     }
-    // if (frameCountRef.current === 300) {
-    //   setMode(Mode.Scanned)
-    // } else {
-    //   frameCountRef.current++
-    // }
   }
 
   const renderFrameContent = () => {
