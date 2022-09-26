@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react"
 import { nextAnimationFrame } from "utils"
 import { StyledVideoCamera } from "./video-camera.styles"
 import { useToast } from "./toast-provider"
+import { getImageDataFromVideoElement } from "./imageUtils"
 
 export type VideoCameraProps = {
   onCameraNotAvailable: () => void
@@ -47,12 +48,10 @@ export const VideoCamera: React.FC<VideoCameraProps> = ({
         const offscreenCanvas = document.createElement("canvas")
         offscreenCanvas.width = width
         offscreenCanvas.height = height
-        const ctx = offscreenCanvas.getContext("2d")
-        if (ctx) {
-          const bounds: [number, number, number, number] = [0, 0, width, height]
+        const context2D = offscreenCanvas.getContext("2d")
+        if (context2D) {
           while (!stopLoopRef.current) {
-            ctx.drawImage(videoElement, ...bounds)
-            const imageData = ctx.getImageData(...bounds)
+            const imageData = getImageDataFromVideoElement(videoElement, context2D)
             onVideoFrame(imageData)
             await nextAnimationFrame()
           }
