@@ -1,4 +1,4 @@
-import { BoundingBox, Corners, Contour } from "types"
+import { BoundingBox, Corners, Contour } from "logic/types"
 import { StyledDiagnosticsOverlay } from "./diagnostics-overlay.styles"
 
 const VIEWPORT_WIDTH = 100

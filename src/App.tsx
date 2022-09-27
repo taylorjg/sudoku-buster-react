@@ -2,7 +2,7 @@ import { useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
-import { BoundingBox, Corners, Contour } from "./types"
+import { BoundingBox, Corners, Contour } from "logic/types"
 import { useProcessImage } from "./use-process-image"
 import { GlobalStyles, StyledContent } from "./App.styles"
 
