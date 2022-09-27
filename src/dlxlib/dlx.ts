@@ -100,6 +100,9 @@ const buildInternalStructure = (matrix: Matrix, options?: Options) => {
   return root
 }
 
+const byAscendingRowIndices = (rowIndex1: number, rowIndex2: number) =>
+  rowIndex1 - rowIndex2
+
 function* search(searchState: SearchState): Generator<Solution> {
 
   searchState.raiseSearchStepEvent()
@@ -107,7 +110,7 @@ function* search(searchState: SearchState): Generator<Solution> {
   if (searchState.isEmpty()) {
     if (searchState.currentSolution.length) {
       searchState.raiseSolutionFoundEvent()
-      yield searchState.currentSolution.slice()
+      yield searchState.currentSolution.slice().sort(byAscendingRowIndices)
     }
     return
   }
@@ -166,8 +169,10 @@ class SearchState {
   }
 
   public raiseSearchStepEvent() {
-    if (this.currentSolution.length) {
-      const partialSolution: PartialSolution = this.currentSolution.slice()
+    if (this.dlx.listenerCount("step") > 0 && this.currentSolution.length) {
+      const partialSolution: PartialSolution = this.currentSolution
+        .slice()
+        .sort(byAscendingRowIndices)
       const e = {
         partialSolution,
         stepIndex: this.stepIndex++
@@ -177,11 +182,15 @@ class SearchState {
   }
 
   public raiseSolutionFoundEvent() {
-    const solution: Solution = this.currentSolution.slice()
-    const e = {
-      solution,
-      solutionIndex: this.solutionIndex++
+    if (this.dlx.listenerCount("solution") > 0) {
+      const solution: Solution = this.currentSolution
+        .slice()
+        .sort(byAscendingRowIndices)
+      const e = {
+        solution,
+        solutionIndex: this.solutionIndex++
+      }
+      this.dlx.emit("solution", e)
     }
-    this.dlx.emit("solution", e)
   }
 }

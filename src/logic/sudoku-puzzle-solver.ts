@@ -24,8 +24,7 @@ export const solve = (
   const internalRows = buildInternalRows(digits)
   const matrix = buildMatrix(internalRows)
   const resolveSolution = (solution: Solution): Digits => {
-    const sortedSolution = solution.slice().sort((rowIndex1, rowIndex2) => rowIndex1 - rowIndex2)
-    const values = sortedSolution.map(internalRowIndex => internalRows[internalRowIndex].value)
+    const values = solution.map(internalRowIndex => internalRows[internalRowIndex].value)
     const digits = values.map(value => value.toString() as Digit)
     return digits as Digits
   }
