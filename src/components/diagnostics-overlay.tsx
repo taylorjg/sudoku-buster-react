@@ -1,12 +1,18 @@
 import { BoundingBox, Corners, Contour } from "types"
 import { StyledDiagnosticsOverlay } from "./diagnostics-overlay.styles"
 
-const SCALE_X = 100 / 224
-const SCALE_Y = 100 / 224
+const VIEWPORT_WIDTH = 100
+const VIEWPORT_HEIGHT = 100
 
-const BOUNDING_BOX_COLOUR = "blue"
-const CORNERS_COLOUR = "magenta"
-const CONTOUR_COLOUR = "red"
+const WASM_INTERNAL_IMAGE_WIDTH = 224
+const WASM_INTERNAL_IMAGE_HEIGHT = 224
+
+const SCALE_X = VIEWPORT_WIDTH / WASM_INTERNAL_IMAGE_WIDTH
+const SCALE_Y = VIEWPORT_HEIGHT / WASM_INTERNAL_IMAGE_HEIGHT
+
+const BOUNDING_BOX_COLOUR = "#0000FF"
+const CORNERS_COLOUR = "#FF00FF"
+const CONTOUR_COLOUR = "#FF0000"
 
 export type DiagnosticsOverlayProps = {
   boundingBox: BoundingBox

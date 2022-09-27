@@ -19,11 +19,7 @@ const NullToastContext = {
 
 const ToastContext = React.createContext<ToastContextType>(NullToastContext)
 
-export type ToastProviderProps = {
-  children: React.ReactNode
-}
-
-export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
+export const ToastProvider: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
 
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState("")
