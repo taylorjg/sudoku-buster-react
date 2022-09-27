@@ -1,4 +1,4 @@
-import { SudokuPuzzle, stringsToDigits } from "logic/sudoku-puzzle"
+import { SudokuPuzzle, stringsToDigits, getInitialValueIndices } from "logic/sudoku-puzzle"
 
 const digits = stringsToDigits([
   "28  3  45",
@@ -12,8 +12,9 @@ const digits = stringsToDigits([
   "63  4  19"
 ])
 
-const initialValueIndices = digits.flatMap((digit, index) => digit === " " ? [] : [index])
+const initialValueIndices = getInitialValueIndices(digits)
 
 const SamplePuzzle = new SudokuPuzzle(digits, initialValueIndices)
 SamplePuzzle.solve()
+
 export { SamplePuzzle }

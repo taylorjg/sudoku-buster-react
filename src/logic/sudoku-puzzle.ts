@@ -9,6 +9,9 @@ export const stringsToDigits = (ss: string[]): Digits => {
   return digits as Digits
 }
 
+export const getInitialValueIndices = (digits: Digits) =>
+  digits.flatMap((digit, index) => digit === " " ? [] : [index])
+
 class SudokuPuzzleIterator implements Iterator<DigitDetails> {
 
   private allDigitDetails: DigitDetails[];

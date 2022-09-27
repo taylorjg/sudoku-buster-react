@@ -3,8 +3,7 @@ import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
 import { BoundingBox, Corners, Contour } from "logic/types"
-import { useProcessImage } from "./use-process-image"
-import { GlobalStyles, StyledContent } from "./App.styles"
+import { SudokuPuzzle } from "logic/sudoku-puzzle"
 
 import { ToastProvider } from "components/toast-provider"
 import { Version } from "components/version"
@@ -16,7 +15,9 @@ import { Sudoku } from "components/sudoku"
 import { Message } from "components/message"
 import { DiagnosticsButton } from "components/diagnostics-button"
 import { NerdyStatsButton } from "components/nerdy-stats-button"
-import { SamplePuzzle } from "sample-puzzle"
+
+import { useProcessImage } from "./use-process-image"
+import { GlobalStyles, StyledContent } from "./App.styles"
 
 enum Mode {
   Initial,
@@ -35,6 +36,7 @@ export const App = () => {
   const [boundingBox, setBoundingBox] = useState<BoundingBox>({ x: 0, y: 0, width: 0, height: 0 })
   const [corners, setCorners] = useState<Corners>([])
   const [contour, setContour] = useState<Contour>([])
+  const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SudokuPuzzle | undefined>()
   const message = MessageMap.get(mode)
   const { processImage } = useProcessImage()
 
@@ -51,12 +53,17 @@ export const App = () => {
   }
 
   const onVideoFrame = (imageData: ImageData): void => {
-    const result = processImage(imageData)
-    if (result) {
-      const [x, y, width, height] = result.boundingBox
-      setBoundingBox({ x, y, width, height })
-      setCorners(result.corners as Corners)
-      setContour(result.contour as Contour)
+    const { result, solvedSudokuPuzzle } = processImage(imageData)
+    if (solvedSudokuPuzzle) {
+      setSolvedSudokuPuzzle(solvedSudokuPuzzle)
+      setMode(Mode.Scanned)
+    } else {
+      if (result) {
+        const [x, y, width, height] = result.boundingBox
+        setBoundingBox({ x, y, width, height })
+        setCorners(result.corners as Corners)
+        setContour(result.contour as Contour)
+      }
     }
   }
 
@@ -81,7 +88,7 @@ export const App = () => {
         )
       case Mode.Scanned:
         return (
-          <Sudoku sudoku={SamplePuzzle} />
+          <Sudoku sudoku={solvedSudokuPuzzle!} />
         )
       default:
         return null

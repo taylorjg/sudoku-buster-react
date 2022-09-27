@@ -1,4 +1,6 @@
 import { findBoundingBox } from "logic/findBoundingBox"
+import { predictDigits } from "logic/cnn"
+import { SudokuPuzzle, getInitialValueIndices } from "logic/sudoku-puzzle"
 import { imageDataToImageTensor, cropGridSquares, inset } from "components/imageUtils"
 
 export const useProcessImage = () => {
@@ -10,9 +12,14 @@ export const useProcessImage = () => {
       const imageTensor = imageDataToImageTensor(imageData)
       const insetImageBoundingBox = inset([0, 0, imageData.width, imageData.height], 2, 2)
       const gridSquareImageTensors = cropGridSquares(imageTensor, insetImageBoundingBox)
-      console.log("gridSquareImageTensors:", gridSquareImageTensors)
+      const digits = predictDigits(gridSquareImageTensors)
+      const initialValueIndices = getInitialValueIndices(digits)
+      const sudokuPuzzle = new SudokuPuzzle(digits, initialValueIndices)
+      if (sudokuPuzzle.solve()) {
+        return { result, solvedSudokuPuzzle: sudokuPuzzle }
+      }
     }
-    return result
+    return { result }
   }
 
   return {
