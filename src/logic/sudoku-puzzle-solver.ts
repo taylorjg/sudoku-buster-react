@@ -25,7 +25,7 @@ export const solve = (
   const matrix = buildMatrix(internalRows)
   const resolveSolution = (solution: Solution): Digits => {
     const values = solution.map(internalRowIndex => internalRows[internalRowIndex].value)
-    const digits = values.map(value => value.toString() as Digit)
+    const digits = values.map(value => value as Digit)
     return digits as Digits
   }
   const dlx = new Dlx()

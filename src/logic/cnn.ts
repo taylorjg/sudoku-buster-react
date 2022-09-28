@@ -7,10 +7,7 @@ export const loadModel = async () => {
   model = await tf.loadLayersModel(`/sudoku-buster-react/model.json`)
 }
 
-const predictionToDigit = (prediction: number): Digit => {
-  if (prediction === 0) return " "
-  return prediction.toString() as Digit
-}
+const predictionToDigit = (prediction: number): Digit => prediction as Digit
 
 export const predictDigits = (gridSquareImageTensors: tf.Tensor4D): Digits => {
   const [batchSize] = gridSquareImageTensors.shape
