@@ -53,16 +53,16 @@ export const App = () => {
   }
 
   const onVideoFrame = (imageData: ImageData): void => {
-    const { result, solvedSudokuPuzzle } = processImage(imageData)
-    if (solvedSudokuPuzzle) {
-      setSolvedSudokuPuzzle(solvedSudokuPuzzle)
-      setMode(Mode.Scanned)
-    } else {
-      if (result) {
+    const result = processImage(imageData)
+    if (result) {
+      if (result.solvedSudokuPuzzle) {
+        setSolvedSudokuPuzzle(result.solvedSudokuPuzzle)
+        setMode(Mode.Scanned)
+      } else {
         const [x, y, width, height] = result.boundingBox
         setBoundingBox({ x, y, width, height })
-        setCorners(result.corners as Corners)
-        setContour(result.contour as Contour)
+        setCorners(result.corners)
+        setContour(result.contour)
       }
     }
   }

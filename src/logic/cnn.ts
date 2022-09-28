@@ -1,4 +1,4 @@
-import * as tf from '@tensorflow/tfjs'
+import * as tf from "@tensorflow/tfjs"
 import { Digit, Digits } from "logic/types"
 
 let model: tf.LayersModel | undefined = undefined
