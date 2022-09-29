@@ -43,6 +43,7 @@ export const App = () => {
   const onFrameClick = () => {
     if (mode === Mode.Initial) {
       setMode(Mode.Scanning)
+      performance.clearMeasures()
     } else {
       setMode(Mode.Initial)
     }

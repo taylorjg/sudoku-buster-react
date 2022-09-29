@@ -17,28 +17,39 @@ type ProcessImageResult = FindBoundingBoxResult & {
   solvedSudokuPuzzle?: SudokuPuzzle
 } | undefined
 
+const perfWrapper = <T>(name: string, fn: () => T): T => {
+  performance.mark(`${name}-start`)
+  const result = fn()
+  performance.measure(name, `${name}-start`)
+  return result
+}
+
 export const useProcessImage = () => {
 
   const processImage = (imageData: ImageData): ProcessImageResult => {
     let result: ProcessImageResult
 
     const fn = (): void => {
-      result = findBoundingBox(imageData)
+      result = perfWrapper("findBoundingBox", () => findBoundingBox(imageData))
+
       if (result) {
         const imageData = result.image2
         const imageTensor = imageDataToImageTensor(imageData)
         const insetImageBoundingBox = inset([0, 0, imageData.width, imageData.height], 2, 2)
         const gridSquareImageTensors = cropGridSquares(imageTensor, insetImageBoundingBox)
-        const digits = predictDigits(gridSquareImageTensors)
+
+        const digits = perfWrapper("predictDigits", () => predictDigits(gridSquareImageTensors))
+
         const initialValueIndices = getInitialValueIndices(digits)
         const sudokuPuzzle = new SudokuPuzzle(digits, initialValueIndices)
-        if (sudokuPuzzle.solve()) {
+
+        if (perfWrapper("solve", () => sudokuPuzzle.solve())) {
           result.solvedSudokuPuzzle = sudokuPuzzle
         }
       }
     }
 
-    tf.tidy(fn)
+    tf.tidy(() => perfWrapper("processImage", fn))
     return result
   }
 
