@@ -1,4 +1,4 @@
-import { BoundingBox, Corners, Contour } from "logic/types"
+import { BoundingBox, Contour, Corners, FindBoundingBoxResult } from "logic/types"
 import { StyledDiagnosticsOverlay } from "./diagnostics-overlay.styles"
 
 const VIEWPORT_SIZE = 100
@@ -10,12 +10,10 @@ const CORNERS_COLOUR = "#FF00FF"
 const CONTOUR_COLOUR = "#FF0000"
 
 export type DiagnosticsOverlayProps = {
-  boundingBox: BoundingBox
-  corners: Corners
-  contour: Contour
+  findBoundingBoxResult: FindBoundingBoxResult | undefined
 }
 
-export const DiagnosticsOverlay: React.FC<DiagnosticsOverlayProps> = (props: DiagnosticsOverlayProps) => {
+export const DiagnosticsOverlay: React.FC<DiagnosticsOverlayProps> = ({ findBoundingBoxResult }) => {
 
   const renderBoundingBox = (boundingBox: BoundingBox) => {
     const { x, y, width, height } = boundingBox
@@ -56,13 +54,15 @@ export const DiagnosticsOverlay: React.FC<DiagnosticsOverlayProps> = (props: Dia
     )
   }
 
-  return (
-    <StyledDiagnosticsOverlay viewBox={`0 0 ${VIEWPORT_SIZE} ${VIEWPORT_SIZE}`}>
-      <>
-        {renderBoundingBox(props.boundingBox)}
-        {renderCorners(props.corners)}
-        {renderContour(props.contour)}
-      </>
-    </StyledDiagnosticsOverlay>
-  )
+  return findBoundingBoxResult
+    ? (
+      <StyledDiagnosticsOverlay viewBox={`0 0 ${VIEWPORT_SIZE} ${VIEWPORT_SIZE}`}>
+        <>
+          {renderBoundingBox(findBoundingBoxResult.boundingBox)}
+          {renderCorners(findBoundingBoxResult.corners)}
+          {renderContour(findBoundingBoxResult.contour)}
+        </>
+      </StyledDiagnosticsOverlay>
+    )
+    : null
 }

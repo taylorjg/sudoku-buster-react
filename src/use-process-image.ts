@@ -1,21 +1,14 @@
 import * as tf from "@tensorflow/tfjs"
-import { BoundingBox, Corners, Contour } from "logic/types"
+import { FindBoundingBoxResult } from "logic/types"
 import { findBoundingBox } from "logic/findBoundingBox"
 import { predictDigits } from "logic/cnn"
 import { SudokuPuzzle, getInitialValueIndices } from "logic/sudoku-puzzle"
 import { imageDataToImageTensor, cropGridSquares, inset } from "components/imageUtils"
 
-type FindBoundingBoxResult = {
-  boundingBox: BoundingBox,
-  image1: ImageData,
-  image2: ImageData,
-  corners: Corners,
-  contour: Contour,
-}
-
-type ProcessImageResult = FindBoundingBoxResult & {
+export type ProcessImageResult = {
+  findBoundingBoxResult: FindBoundingBoxResult
   solvedSudokuPuzzle?: SudokuPuzzle
-} | undefined
+}
 
 const perfWrapper = <T>(name: string, fn: () => T): T => {
   performance.mark(`${name}-start`)
@@ -26,14 +19,14 @@ const perfWrapper = <T>(name: string, fn: () => T): T => {
 
 export const useProcessImage = () => {
 
-  const processImage = (imageData: ImageData): ProcessImageResult => {
-    let result: ProcessImageResult
+  const processImage = (imageData: ImageData): ProcessImageResult | undefined => {
+    let result: ProcessImageResult | undefined
 
     const fn = (): void => {
-      result = perfWrapper("findBoundingBox", () => findBoundingBox(imageData))
+      const findBoundingBoxResult = perfWrapper("findBoundingBox", () => findBoundingBox(imageData))
 
-      if (result) {
-        const imageData = result.image2
+      if (findBoundingBoxResult) {
+        const imageData = findBoundingBoxResult.image2
         const imageTensor = imageDataToImageTensor(imageData)
         const insetImageBoundingBox = inset([0, 0, imageData.width, imageData.height], 2, 2)
         const gridSquareImageTensors = cropGridSquares(imageTensor, insetImageBoundingBox)
@@ -44,7 +37,9 @@ export const useProcessImage = () => {
         const sudokuPuzzle = new SudokuPuzzle(digits, initialValueIndices)
 
         if (perfWrapper("solve", () => sudokuPuzzle.solve())) {
-          result.solvedSudokuPuzzle = sudokuPuzzle
+          result = { findBoundingBoxResult, solvedSudokuPuzzle: sudokuPuzzle }
+        } else {
+          result = { findBoundingBoxResult }
         }
       }
     }

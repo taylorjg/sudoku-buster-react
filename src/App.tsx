@@ -2,7 +2,7 @@ import { useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
-import { BoundingBox, Corners, Contour } from "logic/types"
+import { FindBoundingBoxResult } from "logic/types"
 import { SudokuPuzzle } from "logic/sudoku-puzzle"
 
 import { ToastProvider } from "components/toast-provider"
@@ -33,9 +33,7 @@ const MessageMap = new Map([
 
 export const App = () => {
   const [mode, setMode] = useState(Mode.Initial)
-  const [boundingBox, setBoundingBox] = useState<BoundingBox>({ x: 0, y: 0, width: 0, height: 0 })
-  const [corners, setCorners] = useState<Corners>(Array(4).fill({ x: 0, y: 0 }) as Corners)
-  const [contour, setContour] = useState<Contour>([])
+  const [findBoundingBoxResult, setFindBoundingBoxResult] = useState<FindBoundingBoxResult | undefined>()
   const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SudokuPuzzle | undefined>()
   const message = MessageMap.get(mode)
   const { processImage } = useProcessImage()
@@ -54,16 +52,12 @@ export const App = () => {
   }
 
   const onVideoFrame = (imageData: ImageData): void => {
-    const result = processImage(imageData)
-    if (result) {
-      if (result.solvedSudokuPuzzle) {
-        setSolvedSudokuPuzzle(result.solvedSudokuPuzzle)
-        setMode(Mode.Scanned)
-      } else {
-        setBoundingBox(result.boundingBox)
-        setCorners(result.corners)
-        setContour(result.contour)
-      }
+    const processImageResult = processImage(imageData)
+    if (processImageResult?.solvedSudokuPuzzle) {
+      setSolvedSudokuPuzzle(processImageResult.solvedSudokuPuzzle)
+      setMode(Mode.Scanned)
+    } else {
+      setFindBoundingBoxResult(processImageResult?.findBoundingBoxResult)
     }
   }
 
@@ -79,11 +73,7 @@ export const App = () => {
               onVideoFrame={onVideoFrame}
             />
             <CornersOverlay />
-            <DiagnosticsOverlay
-              boundingBox={boundingBox}
-              corners={corners}
-              contour={contour}
-            />
+            <DiagnosticsOverlay findBoundingBoxResult={findBoundingBoxResult} />
           </>
         )
       case Mode.Scanned:

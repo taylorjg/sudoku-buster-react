@@ -35,3 +35,11 @@ export type BoundingBox = {
 
 export type Corners = [Point, Point, Point, Point]
 export type Contour = Point[]
+
+export type FindBoundingBoxResult = {
+  boundingBox: BoundingBox,
+  image1: ImageData,
+  image2: ImageData,
+  corners: Corners,
+  contour: Contour,
+}

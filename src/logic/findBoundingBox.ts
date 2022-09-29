@@ -1,4 +1,4 @@
-import { Point, BoundingBox, Corners, Contour } from "./types"
+import { BoundingBox, Contour, Corners, FindBoundingBoxResult, Point } from "./types"
 
 declare global {
   interface Window {
@@ -94,7 +94,7 @@ const unpackProcessImageResult = (ptr: number) => {
   return { boundingBox, image1, image2, corners, contour }
 }
 
-export const findBoundingBox = (imageData: ImageData) => {
+export const findBoundingBox = (imageData: ImageData): FindBoundingBoxResult | undefined => {
   const { data, width, height } = imageData
   const unclampedData = new Uint8Array(data.buffer)
   const ptr = processImageWrapper!(unclampedData, width, height)
