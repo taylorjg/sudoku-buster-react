@@ -77,9 +77,7 @@ export const App = () => {
           </>
         )
       case Mode.Scanned:
-        return (
-          <Sudoku sudoku={solvedSudokuPuzzle!} />
-        )
+        return solvedSudokuPuzzle ? <Sudoku solvedSudokuPuzzle={solvedSudokuPuzzle} /> : null
       default:
         return null
     }

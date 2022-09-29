@@ -1,9 +1,6 @@
 import { BoundingBox, Contour, Corners, FindBoundingBoxResult } from "logic/types"
 import { StyledDiagnosticsOverlay } from "./diagnostics-overlay.styles"
-
-const VIEWPORT_SIZE = 100
-const WASM_INTERNAL_IMAGE_SIZE = 224
-const SCALING_FACTOR = VIEWPORT_SIZE / WASM_INTERNAL_IMAGE_SIZE
+import * as C from "./constants"
 
 const BOUNDING_BOX_COLOUR = "#0000FF"
 const CORNERS_COLOUR = "#FF00FF"
@@ -19,36 +16,36 @@ export const DiagnosticsOverlay: React.FC<DiagnosticsOverlayProps> = ({ findBoun
     const { x, y, width, height } = boundingBox
     return (
       <rect
-        x={x * SCALING_FACTOR}
-        y={y * SCALING_FACTOR}
-        width={width * SCALING_FACTOR}
-        height={height * SCALING_FACTOR}
+        x={x * C.SCALING_FACTOR}
+        y={y * C.SCALING_FACTOR}
+        width={width * C.SCALING_FACTOR}
+        height={height * C.SCALING_FACTOR}
         stroke={BOUNDING_BOX_COLOUR}
-        strokeWidth={SCALING_FACTOR}
+        strokeWidth={C.SCALING_FACTOR}
         fill="none"
       />
     )
   }
 
   const renderCorners = (corners: Corners) => {
-    const points = corners.map(({ x, y }) => `${x * SCALING_FACTOR},${y * SCALING_FACTOR}`).join(" ")
+    const points = corners.map(({ x, y }) => `${x * C.SCALING_FACTOR},${y * C.SCALING_FACTOR}`).join(" ")
     return (
       <polygon
         points={points}
         stroke={CORNERS_COLOUR}
-        strokeWidth={SCALING_FACTOR}
+        strokeWidth={C.SCALING_FACTOR}
         fill="none"
       />
     )
   }
 
   const renderContour = (contour: Contour) => {
-    const points = contour.map(({ x, y }) => `${x * SCALING_FACTOR},${y * SCALING_FACTOR}`).join(" ")
+    const points = contour.map(({ x, y }) => `${x * C.SCALING_FACTOR},${y * C.SCALING_FACTOR}`).join(" ")
     return (
       <polygon
         points={points}
         stroke={CONTOUR_COLOUR}
-        strokeWidth={SCALING_FACTOR}
+        strokeWidth={C.SCALING_FACTOR}
         fill="none"
       />
     )
@@ -56,7 +53,7 @@ export const DiagnosticsOverlay: React.FC<DiagnosticsOverlayProps> = ({ findBoun
 
   return findBoundingBoxResult
     ? (
-      <StyledDiagnosticsOverlay viewBox={`0 0 ${VIEWPORT_SIZE} ${VIEWPORT_SIZE}`}>
+      <StyledDiagnosticsOverlay viewBox={`0 0 ${C.VIEWPORT_SIZE} ${C.VIEWPORT_SIZE}`}>
         <>
           {renderBoundingBox(findBoundingBoxResult.boundingBox)}
           {renderCorners(findBoundingBoxResult.corners)}

@@ -2,22 +2,21 @@ import { SudokuPuzzle } from "logic/sudoku-puzzle"
 import { DigitDetails } from "logic/types"
 import { range } from "utils"
 import { StyledSudoku } from "./sudoku.styles"
-
-const VIEWPORT_SIZE = 100
+import * as C from "./constants"
 
 const GRID_LINE_COLOUR = "#888888"
 const GRID_LINE_THIN_WIDTH = .5
 const GRID_LINE_THICK_WIDTH = GRID_LINE_THIN_WIDTH * 2
-const GRID_SQUARE_SIZE = (VIEWPORT_SIZE - 2 * GRID_LINE_THIN_WIDTH) / 9
+const GRID_SQUARE_SIZE = (C.VIEWPORT_SIZE - 2 * GRID_LINE_THIN_WIDTH) / 9
 const DIGIT_FONT_SIZE = GRID_SQUARE_SIZE * 0.75
 const DIGIT_INITIAL_VALUE_COLOUR = "#FF00FF"
 const DIGIT_SOLVED_VALUE_COLOUR = "#000000"
 
 export type SudokuProps = {
-  sudoku: SudokuPuzzle
+  solvedSudokuPuzzle: SudokuPuzzle
 }
 
-export const Sudoku: React.FC<SudokuProps> = ({ sudoku }) => {
+export const Sudoku: React.FC<SudokuProps> = ({ solvedSudokuPuzzle }) => {
 
   const renderHorizontalGridLines = (): JSX.Element[] => {
     const ys = range(10)
@@ -26,7 +25,7 @@ export const Sudoku: React.FC<SudokuProps> = ({ sudoku }) => {
         key={`horizontal-grid-line-${y}`}
         x1="0"
         y1={y * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
-        x2={VIEWPORT_SIZE}
+        x2={C.VIEWPORT_SIZE}
         y2={y * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
         strokeWidth={y % 3 ? GRID_LINE_THIN_WIDTH : GRID_LINE_THICK_WIDTH}
         stroke={GRID_LINE_COLOUR}
@@ -42,7 +41,7 @@ export const Sudoku: React.FC<SudokuProps> = ({ sudoku }) => {
         x1={x * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
         y1="0"
         x2={x * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
-        y2={VIEWPORT_SIZE}
+        y2={C.VIEWPORT_SIZE}
         strokeWidth={x % 3 ? GRID_LINE_THIN_WIDTH : GRID_LINE_THICK_WIDTH}
         stroke={GRID_LINE_COLOUR}
       />
@@ -69,10 +68,10 @@ export const Sudoku: React.FC<SudokuProps> = ({ sudoku }) => {
     )
   }
 
-  const allDigitDetails = Array.from(sudoku)
+  const allDigitDetails = Array.from(solvedSudokuPuzzle)
 
   return (
-    <StyledSudoku viewBox={`0 0 ${VIEWPORT_SIZE} ${VIEWPORT_SIZE}`}>
+    <StyledSudoku viewBox={`0 0 ${C.VIEWPORT_SIZE} ${C.VIEWPORT_SIZE}`}>
       {renderHorizontalGridLines()}
       {renderVerticalGridLines()}
       {allDigitDetails.map(renderDigit)}
