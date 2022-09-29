@@ -1,4 +1,5 @@
-import { SudokuPuzzle, stringsToDigits, getInitialValueIndices } from "logic/sudoku-puzzle"
+import { SudokuPuzzle } from "logic/sudoku-puzzle"
+import { stringsToDigits, getInitialValueIndices } from "logic/sudoku-puzzle-utils"
 
 const digits = stringsToDigits([
   "28  3  45",

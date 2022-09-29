@@ -2,7 +2,8 @@ import * as tf from "@tensorflow/tfjs"
 import { FindBoundingBoxResult } from "logic/types"
 import { findBoundingBox } from "logic/findBoundingBox"
 import { predictDigits } from "logic/cnn"
-import { SudokuPuzzle, getInitialValueIndices } from "logic/sudoku-puzzle"
+import { SudokuPuzzle } from "logic/sudoku-puzzle"
+import { getInitialValueIndices } from "logic/sudoku-puzzle-utils"
 import { imageDataToImageTensor, cropGridSquares, inset } from "components/imageUtils"
 
 export type ProcessImageResult = {
