@@ -1,4 +1,4 @@
-import { BoundingBox, Corners, Contour } from "./types"
+import { Point, BoundingBox, Corners, Contour } from "./types"
 
 declare global {
   interface Window {
@@ -54,20 +54,28 @@ const unpackImage = ([width, height, channels, ptr]: Int32Array) => {
 
 const range = (n: number) => Array.from(Array(n).keys())
 
-const unpackPoints = (data: Int32Array) => {
+const unpackPoint = (data: Int32Array) => (pointIndex: number): Point => {
+  const baseIndex = pointIndex * 2
+  const x = data[baseIndex]
+  const y = data[baseIndex + 1]
+  return { x, y }
+}
+
+const unpackPoints = (data: Int32Array): Point[] => {
   const numPoints = data.length / 2
-  return range(numPoints).map(index => {
-    const x = data[index * 2]
-    const y = data[index * 2 + 1]
-    return { x, y }
-  })
+  return range(numPoints).map(unpackPoint(data))
 }
 
-const unpackCorners = (data: Int32Array) => {
-  return unpackPoints(data)
+const unpackCorners = (data: Int32Array): Corners => {
+  const unpackPointFromData = unpackPoint(data)
+  const point1 = unpackPointFromData(0)
+  const point2 = unpackPointFromData(1)
+  const point3 = unpackPointFromData(2)
+  const point4 = unpackPointFromData(3)
+  return [point1, point2, point3, point4]
 }
 
-const unpackContour = ([numPoints, ptr]: Int32Array) => {
+const unpackContour = ([numPoints, ptr]: Int32Array): Contour => {
   const ptr32 = ptr / helloModule!.HEAP32.BYTES_PER_ELEMENT
   const data = helloModule!.HEAP32.slice(ptr32, ptr32 + numPoints * 2)
   return unpackPoints(data)

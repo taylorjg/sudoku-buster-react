@@ -3,10 +3,12 @@ import { DigitDetails } from "logic/types"
 import { range } from "utils"
 import { StyledSudoku } from "./sudoku.styles"
 
+const VIEWPORT_SIZE = 100
+
 const GRID_LINE_COLOUR = "#888888"
 const GRID_LINE_THIN_WIDTH = .5
 const GRID_LINE_THICK_WIDTH = GRID_LINE_THIN_WIDTH * 2
-const GRID_SQUARE_SIZE = (100 - 2 * GRID_LINE_THIN_WIDTH) / 9
+const GRID_SQUARE_SIZE = (VIEWPORT_SIZE - 2 * GRID_LINE_THIN_WIDTH) / 9
 const DIGIT_FONT_SIZE = GRID_SQUARE_SIZE * 0.75
 const DIGIT_INITIAL_VALUE_COLOUR = "#FF00FF"
 const DIGIT_SOLVED_VALUE_COLOUR = "#000000"
@@ -24,7 +26,7 @@ export const Sudoku: React.FC<SudokuProps> = ({ sudoku }) => {
         key={`horizontal-grid-line-${y}`}
         x1="0"
         y1={y * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
-        x2="100"
+        x2={VIEWPORT_SIZE}
         y2={y * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
         strokeWidth={y % 3 ? GRID_LINE_THIN_WIDTH : GRID_LINE_THICK_WIDTH}
         stroke={GRID_LINE_COLOUR}
@@ -40,7 +42,7 @@ export const Sudoku: React.FC<SudokuProps> = ({ sudoku }) => {
         x1={x * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
         y1="0"
         x2={x * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH}
-        y2="100"
+        y2={VIEWPORT_SIZE}
         strokeWidth={x % 3 ? GRID_LINE_THIN_WIDTH : GRID_LINE_THICK_WIDTH}
         stroke={GRID_LINE_COLOUR}
       />
@@ -70,7 +72,7 @@ export const Sudoku: React.FC<SudokuProps> = ({ sudoku }) => {
   const allDigitDetails = Array.from(sudoku)
 
   return (
-    <StyledSudoku viewBox="0 0 100 100">
+    <StyledSudoku viewBox={`0 0 ${VIEWPORT_SIZE} ${VIEWPORT_SIZE}`}>
       {renderHorizontalGridLines()}
       {renderVerticalGridLines()}
       {allDigitDetails.map(renderDigit)}

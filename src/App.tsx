@@ -34,7 +34,7 @@ const MessageMap = new Map([
 export const App = () => {
   const [mode, setMode] = useState(Mode.Initial)
   const [boundingBox, setBoundingBox] = useState<BoundingBox>({ x: 0, y: 0, width: 0, height: 0 })
-  const [corners, setCorners] = useState<Corners>([])
+  const [corners, setCorners] = useState<Corners>(Array(4).fill({ x: 0, y: 0 }) as Corners)
   const [contour, setContour] = useState<Contour>([])
   const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SudokuPuzzle | undefined>()
   const message = MessageMap.get(mode)

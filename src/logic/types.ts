@@ -33,5 +33,5 @@ export type BoundingBox = {
   height: number
 }
 
-export type Corners = Point[]
+export type Corners = [Point, Point, Point, Point]
 export type Contour = Point[]

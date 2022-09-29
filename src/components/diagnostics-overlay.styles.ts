@@ -9,9 +9,3 @@ export const StyledDiagnosticsOverlay = styled.svg`
   pointer-events: none;
   z-index: 2;
 `
-
-// export const StyledPath = styled.path`
-//   stroke: black;
-//   stroke-width: 2;
-//   fill: none;
-// `
