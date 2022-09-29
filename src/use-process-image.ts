@@ -1,12 +1,12 @@
 import * as tf from "@tensorflow/tfjs"
-import { Corners, Contour } from "logic/types"
+import { BoundingBox, Corners, Contour } from "logic/types"
 import { findBoundingBox } from "logic/findBoundingBox"
 import { predictDigits } from "logic/cnn"
 import { SudokuPuzzle, getInitialValueIndices } from "logic/sudoku-puzzle"
 import { imageDataToImageTensor, cropGridSquares, inset } from "components/imageUtils"
 
 type FindBoundingBoxResult = {
-  boundingBox: Int32Array,
+  boundingBox: BoundingBox,
   image1: ImageData,
   image2: ImageData,
   corners: Corners,

@@ -59,8 +59,7 @@ export const App = () => {
         setSolvedSudokuPuzzle(result.solvedSudokuPuzzle)
         setMode(Mode.Scanned)
       } else {
-        const [x, y, width, height] = result.boundingBox
-        setBoundingBox({ x, y, width, height })
+        setBoundingBox(result.boundingBox)
         setCorners(result.corners)
         setContour(result.contour)
       }

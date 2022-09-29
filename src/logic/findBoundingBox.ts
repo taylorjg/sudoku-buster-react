@@ -1,3 +1,5 @@
+import { BoundingBox, Corners, Contour } from "./types"
+
 declare global {
   interface Window {
     createHelloModule: EmscriptenModuleFactory
@@ -75,11 +77,12 @@ const unpackProcessImageResult = (ptr: number) => {
   const NUM_INT_FIELDS = 22
   const ptr32 = ptr / helloModule!.HEAP32.BYTES_PER_ELEMENT
   const data = helloModule!.HEAP32.slice(ptr32, ptr32 + NUM_INT_FIELDS)
-  const boundingBox = data.slice(0, 4)
+  const [x, y, width, height] = data.slice(0, 4)
+  const boundingBox: BoundingBox = { x, y, width, height }
   const image1 = unpackImage(data.slice(4, 8))
   const image2 = unpackImage(data.slice(8, 12))
-  const corners = unpackCorners(data.slice(12, 20))
-  const contour = unpackContour(data.slice(20, 22))
+  const corners: Corners = unpackCorners(data.slice(12, 20))
+  const contour: Contour = unpackContour(data.slice(20, 22))
   return { boundingBox, image1, image2, corners, contour }
 }
 
