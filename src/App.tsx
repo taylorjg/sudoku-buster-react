@@ -5,6 +5,7 @@ import { Global } from "@emotion/react"
 import { FindBoundingBoxResult } from "logic/types"
 import { SudokuPuzzle } from "logic/sudoku-puzzle"
 
+import { DiagnosticsSettings } from "components/types"
 import { ToastProvider } from "components/toast-provider"
 import { Version } from "components/version"
 import { Frame } from "components/frame"
@@ -35,6 +36,11 @@ export const App = () => {
   const [mode, setMode] = useState(Mode.Initial)
   const [findBoundingBoxResult, setFindBoundingBoxResult] = useState<FindBoundingBoxResult | undefined>()
   const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SudokuPuzzle | undefined>()
+  const [diagnosticsSettings, setDiagnosticsSettings] = useState({
+    showBoundingBox: true,
+    showCorners: false,
+    showContour: false
+  })
   const message = MessageMap.get(mode)
   const { processImage } = useProcessImage()
 
@@ -73,11 +79,16 @@ export const App = () => {
               onVideoFrame={onVideoFrame}
             />
             <CornersOverlay />
-            <DiagnosticsOverlay findBoundingBoxResult={findBoundingBoxResult} />
+            <DiagnosticsOverlay
+              diagnosticsSettings={diagnosticsSettings}
+              findBoundingBoxResult={findBoundingBoxResult}
+            />
           </>
         )
       case Mode.Scanned:
-        return solvedSudokuPuzzle ? <Sudoku solvedSudokuPuzzle={solvedSudokuPuzzle} /> : null
+        return solvedSudokuPuzzle
+          ? <Sudoku solvedSudokuPuzzle={solvedSudokuPuzzle} />
+          : null
       default:
         return null
     }
@@ -94,7 +105,10 @@ export const App = () => {
         </Frame>
         {message && <Message message={message} />}
       </StyledContent>
-      <DiagnosticsButton />
+      <DiagnosticsButton
+        diagnosticsSettings={diagnosticsSettings}
+        onChange={setDiagnosticsSettings}
+      />
       <NerdyStatsButton />
     </ToastProvider>
   )
