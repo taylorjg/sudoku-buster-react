@@ -5,7 +5,6 @@ import { Global } from "@emotion/react"
 import { FindBoundingBoxResult } from "logic/types"
 import { SudokuPuzzle } from "logic/sudoku-puzzle"
 
-import { DiagnosticsSettings } from "components/types"
 import { ToastProvider } from "components/toast-provider"
 import { Version } from "components/version"
 import { Frame } from "components/frame"
@@ -37,7 +36,7 @@ export const App = () => {
   const [findBoundingBoxResult, setFindBoundingBoxResult] = useState<FindBoundingBoxResult | undefined>()
   const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SudokuPuzzle | undefined>()
   const [diagnosticsSettings, setDiagnosticsSettings] = useState({
-    showBoundingBox: true,
+    showBoundingBox: false,
     showCorners: false,
     showContour: false
   })
@@ -46,6 +45,8 @@ export const App = () => {
 
   const onFrameClick = () => {
     if (mode === Mode.Initial) {
+      setFindBoundingBoxResult(undefined)
+      setSolvedSudokuPuzzle(undefined)
       setMode(Mode.Scanning)
       performance.clearMeasures()
     } else {
