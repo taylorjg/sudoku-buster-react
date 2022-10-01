@@ -15,6 +15,16 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
   diagnosticsSettings,
   onChange
 }) => {
+
+  const makeClickHandler = (field: keyof DiagnosticsSettings): () => void => {
+    return (): void => {
+      onChange({
+        ...diagnosticsSettings,
+        [field]: !diagnosticsSettings[field]
+      })
+    }
+  }
+
   return (
     <Drawer anchor="bottom" open={isDrawerOpen} onClose={closeDrawer}>
       <StyledDiagnosticsSettingsPanel>
@@ -27,10 +37,7 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
                 aria-labelledby="bounding-box-label"
                 size="small"
                 checked={diagnosticsSettings.showBoundingBox}
-                onClick={() => onChange({
-                  ...diagnosticsSettings,
-                  showBoundingBox: !diagnosticsSettings.showBoundingBox
-                })}
+                onClick={makeClickHandler("showBoundingBox")}
               />
             }
             label={"On"}
@@ -45,10 +52,7 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
                 aria-labelledby="corners-label"
                 size="small"
                 checked={diagnosticsSettings.showCorners}
-                onClick={() => onChange({
-                  ...diagnosticsSettings,
-                  showCorners: !diagnosticsSettings.showCorners
-                })}
+                onClick={makeClickHandler("showCorners")}
               />
             }
             label={"On"}
@@ -63,10 +67,7 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
                 aria-labelledby="contour-label"
                 size="small"
                 checked={diagnosticsSettings.showContour}
-                onClick={() => onChange({
-                  ...diagnosticsSettings,
-                  showContour: !diagnosticsSettings.showContour
-                })}
+                onClick={makeClickHandler("showContour")}
               />
             }
             label={"On"}
