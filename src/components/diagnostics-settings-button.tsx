@@ -2,17 +2,17 @@ import React, { useState } from "react"
 import { Tooltip } from "@mui/material"
 import { DiagnosticsSettings } from "./types"
 import { DiagnosticsSettingsPanel } from "./diagnostics-settings-panel"
-import { StyledDiagnosticsButton } from "./diagnostics-button.styles"
+import { StyledDiagnosticsSettingsButton } from "./diagnostics-settings-button.styles"
 
 // https://emojipedia.org/microscope/
 const MICROSCOPE_EMOJI = "\u{1F52C}"
 
-export type DiagnosticsButtonProps = {
+export type DiagnosticsSettingsButtonProps = {
   diagnosticsSettings: DiagnosticsSettings
   onChange: (diagnosticsSettings: DiagnosticsSettings) => void
 }
 
-export const DiagnosticsButton: React.FC<DiagnosticsButtonProps> = ({
+export const DiagnosticsSettingsButton: React.FC<DiagnosticsSettingsButtonProps> = ({
   diagnosticsSettings,
   onChange
 }) => {
@@ -29,7 +29,9 @@ export const DiagnosticsButton: React.FC<DiagnosticsButtonProps> = ({
   return (
     <>
       <Tooltip title="Diagnostics Settings">
-        <StyledDiagnosticsButton onClick={openDrawer}>{MICROSCOPE_EMOJI}</StyledDiagnosticsButton>
+        <StyledDiagnosticsSettingsButton onClick={openDrawer}>
+          {MICROSCOPE_EMOJI}
+        </StyledDiagnosticsSettingsButton>
       </Tooltip>
       <DiagnosticsSettingsPanel
         isDrawerOpen={isDrawerOpen}

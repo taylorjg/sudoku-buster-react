@@ -13,7 +13,7 @@ import { CornersOverlay } from "components/corners-overlay"
 import { DiagnosticsOverlay } from "components/diagnostics-overlay"
 import { Sudoku } from "components/sudoku"
 import { Message } from "components/message"
-import { DiagnosticsButton } from "components/diagnostics-button"
+import { DiagnosticsSettingsButton } from "components/diagnostics-settings-button"
 import { NerdyStatsButton } from "components/nerdy-stats-button"
 
 import { useProcessImage } from "./use-process-image"
@@ -106,7 +106,7 @@ export const App = () => {
         </Frame>
         {message && <Message message={message} />}
       </StyledContent>
-      <DiagnosticsButton
+      <DiagnosticsSettingsButton
         diagnosticsSettings={diagnosticsSettings}
         onChange={setDiagnosticsSettings}
       />

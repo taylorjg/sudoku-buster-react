@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 
-export const StyledDiagnosticsButton = styled.span`
+export const StyledDiagnosticsSettingsButton = styled.span`
   font-size: xx-large;
   position: fixed;
   bottom: .25rem;
