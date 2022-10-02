@@ -10,11 +10,10 @@ export type Tuple81<T> = [
   T, T, T, T, T, T, T, T, T
 ]
 
-// TODO: rename => Digit
-export type NonZeroDigit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+export type Digit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
 export type Value = {
-  digit: NonZeroDigit
+  digit: Digit
   isInitialValue: boolean
 }
 

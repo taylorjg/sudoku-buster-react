@@ -1,10 +1,10 @@
-import { NonZeroDigit, RowColValue, SolvedSudokuPuzzle, UnsolvedSudokuPuzzle, Value } from "./types"
+import { Digit, RowColValue, SolvedSudokuPuzzle, UnsolvedSudokuPuzzle, Value } from "./types"
 import { Dlx, Matrix, MatrixRow, Solution } from "dlxlib"
 import { range } from "../utils"
 
 const ROWS = range(9)
 const COLS = range(9)
-const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as NonZeroDigit[]
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as Digit[]
 
 type Coords = {
   row: number
