@@ -1,5 +1,4 @@
-import { SudokuPuzzle } from "logic/sudoku-puzzle"
-import { DigitDetails } from "logic/types"
+import { SolvedSudokuPuzzle, RowColValue } from "logic/types"
 import { range } from "utils"
 import { StyledSudoku } from "./sudoku.styles"
 import * as C from "./constants"
@@ -13,7 +12,7 @@ const DIGIT_INITIAL_VALUE_COLOUR = "#FF00FF"
 const DIGIT_SOLVED_VALUE_COLOUR = "#000000"
 
 export type SudokuProps = {
-  solvedSudokuPuzzle: SudokuPuzzle
+  solvedSudokuPuzzle: SolvedSudokuPuzzle
 }
 
 export const Sudoku: React.FC<SudokuProps> = ({ solvedSudokuPuzzle }) => {
@@ -48,8 +47,8 @@ export const Sudoku: React.FC<SudokuProps> = ({ solvedSudokuPuzzle }) => {
     ))
   }
 
-  const renderDigit = (digitDetails: DigitDetails): JSX.Element => {
-    const { row, col, digit, isInitialValue } = digitDetails
+  const renderValue = (rowColValue: RowColValue): JSX.Element => {
+    const { row, col, value: { digit, isInitialValue } } = rowColValue
     const x = (col + .5) * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH
     const y = (row + .5) * GRID_SQUARE_SIZE + GRID_LINE_THIN_WIDTH
     const digitColour = isInitialValue ? DIGIT_INITIAL_VALUE_COLOUR : DIGIT_SOLVED_VALUE_COLOUR
@@ -68,13 +67,17 @@ export const Sudoku: React.FC<SudokuProps> = ({ solvedSudokuPuzzle }) => {
     )
   }
 
-  const allDigitDetails = Array.from(solvedSudokuPuzzle)
+  const rowColValues = solvedSudokuPuzzle.map((value, index) => ({
+    row: Math.floor(index / 9),
+    col: index % 9,
+    value
+  }))
 
   return (
     <StyledSudoku viewBox={`0 0 ${C.VIEWPORT_SIZE} ${C.VIEWPORT_SIZE}`}>
       {renderHorizontalGridLines()}
       {renderVerticalGridLines()}
-      {allDigitDetails.map(renderDigit)}
+      {rowColValues.map(renderValue)}
     </StyledSudoku>
   )
 }

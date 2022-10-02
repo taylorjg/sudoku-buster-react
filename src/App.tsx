@@ -2,8 +2,7 @@ import { useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
-import { FindBoundingBoxResult } from "logic/types"
-import { SudokuPuzzle } from "logic/sudoku-puzzle"
+import { FindBoundingBoxResult, SolvedSudokuPuzzle } from "logic/types"
 
 import { ToastProvider } from "components/toast-provider"
 import { Version } from "components/version"
@@ -34,7 +33,7 @@ const MessageMap = new Map([
 export const App = () => {
   const [mode, setMode] = useState(Mode.Initial)
   const [findBoundingBoxResult, setFindBoundingBoxResult] = useState<FindBoundingBoxResult | undefined>()
-  const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SudokuPuzzle | undefined>()
+  const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SolvedSudokuPuzzle | undefined>()
   const [diagnosticsSettings, setDiagnosticsSettings] = useState({
     showBoundingBox: false,
     showCorners: false,

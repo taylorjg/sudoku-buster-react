@@ -1,6 +1,4 @@
-export type Digit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-
-type Tuple81<T> = [
+export type Tuple81<T> = [
   T, T, T, T, T, T, T, T, T,
   T, T, T, T, T, T, T, T, T,
   T, T, T, T, T, T, T, T, T,
@@ -12,13 +10,22 @@ type Tuple81<T> = [
   T, T, T, T, T, T, T, T, T
 ]
 
-export type Digits = Tuple81<Digit>
+// TODO: rename => Digit
+export type NonZeroDigit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 
-export type DigitDetails = {
+export type Value = {
+  digit: NonZeroDigit
+  isInitialValue: boolean
+}
+
+export type UnsolvedSudokuPuzzle = Tuple81<Value | undefined>
+export type SolvedSudokuPuzzle = Tuple81<Value>
+
+// TODO: row, col => Coords
+export type RowColValue = {
   row: number
   col: number
-  digit: Digit
-  isInitialValue: boolean
+  value: Value
 }
 
 export type Point = {

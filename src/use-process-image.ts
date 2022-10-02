@@ -1,13 +1,13 @@
 import * as tf from "@tensorflow/tfjs"
-import { Digits, FindBoundingBoxResult } from "logic/types"
+import { FindBoundingBoxResult, SolvedSudokuPuzzle, UnsolvedSudokuPuzzle } from "logic/types"
 import { findBoundingBox } from "logic/findBoundingBox"
 import { predictDigits } from "logic/cnn"
-import { SudokuPuzzle } from "logic/sudoku-puzzle"
+import { solve } from "logic/sudoku-puzzle-solver"
 import { imageDataToImageTensor, cropGridSquares, inset } from "components/imageUtils"
 
 export type ProcessImageResult = {
   findBoundingBoxResult: FindBoundingBoxResult
-  solvedSudokuPuzzle?: SudokuPuzzle
+  solvedSudokuPuzzle?: SolvedSudokuPuzzle
 }
 
 const perfWrapper = <T>(name: string, fn: () => T): T => {
@@ -16,9 +16,6 @@ const perfWrapper = <T>(name: string, fn: () => T): T => {
   performance.measure(name, `${name}-start`)
   return result
 }
-
-const getInitialValueIndices = (digits: Digits) =>
-  digits.flatMap((digit, index) => digit === 0 ? [] : [index])
 
 export const useProcessImage = () => {
 
@@ -34,16 +31,14 @@ export const useProcessImage = () => {
         const insetImageBoundingBox = inset([0, 0, imageData.width, imageData.height], 2, 2)
         const gridSquareImageTensors = cropGridSquares(imageTensor, insetImageBoundingBox)
 
-        const digits = perfWrapper("predictDigits", () => predictDigits(gridSquareImageTensors))
+        const predictions = perfWrapper("predictDigits", () => predictDigits(gridSquareImageTensors))
+        const unsolvedSudokuPuzzle = predictions.map(prediction => {
+          if (prediction >= 1 && prediction <= 9) return { digit: prediction, isInitialValue: true }
+          return undefined
+        }) as UnsolvedSudokuPuzzle
 
-        const initialValueIndices = getInitialValueIndices(digits)
-        const sudokuPuzzle = new SudokuPuzzle(digits, initialValueIndices)
-
-        if (perfWrapper("solve", () => sudokuPuzzle.solve())) {
-          result = { findBoundingBoxResult, solvedSudokuPuzzle: sudokuPuzzle }
-        } else {
-          result = { findBoundingBoxResult }
-        }
+        const solvedSudokuPuzzle = perfWrapper("solve", () => solve(unsolvedSudokuPuzzle))
+        result = { findBoundingBoxResult, solvedSudokuPuzzle }
       }
     }
 
