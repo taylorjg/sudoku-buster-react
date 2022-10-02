@@ -1,5 +1,5 @@
 import * as tf from "@tensorflow/tfjs"
-import { FindBoundingBoxResult, SolvedSudokuPuzzle, UnsolvedSudokuPuzzle } from "logic/types"
+import { Digit, FindBoundingBoxResult, SolvedSudokuPuzzle, UnsolvedSudokuPuzzle } from "logic/types"
 import { findBoundingBox } from "logic/findBoundingBox"
 import { predictDigits } from "logic/cnn"
 import { solve } from "logic/sudoku-puzzle-solver"
@@ -32,10 +32,8 @@ export const useProcessImage = () => {
         const gridSquareImageTensors = cropGridSquares(imageTensor, insetImageBoundingBox)
 
         const predictions = perfWrapper("predictDigits", () => predictDigits(gridSquareImageTensors))
-        const unsolvedSudokuPuzzle = predictions.map(prediction => {
-          if (prediction >= 1 && prediction <= 9) return { digit: prediction, isInitialValue: true }
-          return undefined
-        }) as UnsolvedSudokuPuzzle
+        const unsolvedSudokuPuzzle = predictions.map(prediction =>
+          (prediction >= 1 && prediction <= 9) ? prediction as Digit : undefined) as UnsolvedSudokuPuzzle
 
         const solvedSudokuPuzzle = perfWrapper("solve", () => solve(unsolvedSudokuPuzzle))
         result = { findBoundingBoxResult, solvedSudokuPuzzle }

@@ -17,14 +17,22 @@ export type Value = {
   isInitialValue: boolean
 }
 
-export type UnsolvedSudokuPuzzle = Tuple81<Value | undefined>
+export type UnsolvedSudokuPuzzle = Tuple81<Digit | undefined>
 export type SolvedSudokuPuzzle = Tuple81<Value>
 
-// TODO: row, col => Coords
-export type RowColValue = {
-  row: number
-  col: number
-  value: Value
+export class Coords {
+
+  private constructor(
+    public row: number,
+    public col: number
+  ) {
+  }
+
+  public static fromIndex(index: number): Coords {
+    const row = Math.floor(index / 9)
+    const col = index % 9
+    return new Coords(row, col)
+  }
 }
 
 export type Point = {
