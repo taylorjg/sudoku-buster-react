@@ -7,7 +7,7 @@ export type FrameProps = {
 
 export const Frame: React.FC<React.PropsWithChildren<FrameProps>> = ({ children, onFrameClick }) => {
   return (
-    <StyledFrame onClick={onFrameClick}>
+    <StyledFrame onClick={onFrameClick} data-testid="frame">
       {children}
     </StyledFrame>
   )
