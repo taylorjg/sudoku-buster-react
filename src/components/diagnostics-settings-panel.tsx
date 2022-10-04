@@ -1,4 +1,4 @@
-import { Drawer, FormControl, FormControlLabel, FormLabel, Switch } from "@mui/material"
+import { Drawer, FormControlLabel, FormGroup, Switch } from "@mui/material"
 import { StyledDiagnosticsSettingsPanel } from "./diagnostics-settings-panel.styles"
 import { DiagnosticsSettings } from "./types"
 
@@ -28,51 +28,38 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
   return (
     <Drawer anchor="bottom" open={isDrawerOpen} onClose={closeDrawer}>
       <StyledDiagnosticsSettingsPanel>
-        <FormControl>
-          <FormLabel id="bounding-box-label">Bounding Box</FormLabel>
+        <FormGroup>
           <FormControlLabel
-            sx={{ mt: ".25rem" }}
             control={
               <Switch
-                aria-labelledby="bounding-box-label"
                 size="small"
                 checked={diagnosticsSettings.showBoundingBox}
                 onClick={makeClickHandler("showBoundingBox")}
               />
             }
-            label={"On"}
+            label="Bounding Box"
           />
-        </FormControl>
-        <FormControl>
-          <FormLabel id="corners-label">Corners</FormLabel>
           <FormControlLabel
-            sx={{ mt: ".25rem" }}
             control={
               <Switch
-                aria-labelledby="corners-label"
                 size="small"
                 checked={diagnosticsSettings.showCorners}
                 onClick={makeClickHandler("showCorners")}
               />
             }
-            label={"On"}
+            label="Corners"
           />
-        </FormControl>
-        <FormControl>
-          <FormLabel id="contour-label">Contour</FormLabel>
           <FormControlLabel
-            sx={{ mt: ".25rem" }}
             control={
               <Switch
-                aria-labelledby="contour-label"
                 size="small"
                 checked={diagnosticsSettings.showContour}
                 onClick={makeClickHandler("showContour")}
               />
             }
-            label={"On"}
+            label="Contour"
           />
-        </FormControl>
+        </FormGroup>
       </StyledDiagnosticsSettingsPanel>
     </Drawer>
   )
