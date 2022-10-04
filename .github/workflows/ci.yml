@@ -11,3 +11,11 @@ jobs:
       - run: npm clean-install
       - name: "Run unit tests"
         run: npm test
+  cypress-run:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node16.17.0-chrome106
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cypress run
+        uses: cypress-io/github-action@v4.2.0
