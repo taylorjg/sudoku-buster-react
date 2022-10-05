@@ -25,3 +25,5 @@ jobs:
           wait-on: "http://localhost:3333/sudoku-buster-react"
           wait-on-timeout: 120
           browser: chrome
+        env:
+          PORT: 3333
