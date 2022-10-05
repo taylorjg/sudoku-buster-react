@@ -8,7 +8,7 @@ const SCANNED_MESSAGE = "Tap the big square to start over"
 
 const MICROSCOPE_EMOJI = "\u{1F52C}"
 
-const SCANNING_TIMEOUT = 10000
+const SCANNING_TIMEOUT = 15000
 
 const clickFrame = () => {
   cy.findByTestId("frame").click()
