@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
@@ -30,10 +30,23 @@ const MessageMap = new Map([
   [Mode.Scanned, "Tap the big square to start over"],
 ])
 
+type Stats = {
+  frameCount: number
+  startTime: number
+  elapsedTime: number
+}
+
+const ZeroStats = {
+  frameCount: 0,
+  startTime: 0,
+  elapsedTime: 0
+}
+
 export const App = () => {
   const [mode, setMode] = useState(Mode.Initial)
   const [findBoundingBoxResult, setFindBoundingBoxResult] = useState<FindBoundingBoxResult | undefined>()
   const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SolvedSudokuPuzzle | undefined>()
+  const [stats, setStats] = useState<Stats>(ZeroStats)
   const [diagnosticsSettings, setDiagnosticsSettings] = useState({
     showBoundingBox: false,
     showCorners: false,
@@ -47,6 +60,7 @@ export const App = () => {
       setFindBoundingBoxResult(undefined)
       setSolvedSudokuPuzzle(undefined)
       setMode(Mode.Scanning)
+      setStats({ ...ZeroStats, startTime: Math.floor(performance.now()) })
       performance.clearMeasures()
     } else {
       setMode(Mode.Initial)
@@ -57,8 +71,20 @@ export const App = () => {
     setMode(Mode.Initial)
   }
 
+  useEffect(() => {
+    console.log(JSON.stringify(stats))
+  }, [stats])
+
   const onVideoFrame = (imageData: ImageData): void => {
     const processImageResult = processImage(imageData)
+    setStats(currentStats => {
+      const now = performance.now()
+      return {
+        ...currentStats,
+        frameCount: currentStats.frameCount + 1,
+        elapsedTime: Math.floor(now - currentStats.startTime)
+      }
+    })
     if (processImageResult?.solvedSudokuPuzzle) {
       setSolvedSudokuPuzzle(processImageResult.solvedSudokuPuzzle)
       setMode(Mode.Scanned)
