@@ -12,9 +12,11 @@ import { CornersOverlay } from "components/corners-overlay"
 import { DiagnosticsOverlay } from "components/diagnostics-overlay"
 import { Sudoku } from "components/sudoku"
 import { Message } from "components/message"
+import { StatsPanel } from "components/stats-panel"
 import { DiagnosticsSettingsButton } from "components/diagnostics-settings-button"
 import { NerdyStatsButton } from "components/nerdy-stats-button"
 
+import { Stats } from "components/types"
 import { useProcessImage } from "./use-process-image"
 import { GlobalStyles, StyledContent } from "./App.styles"
 
@@ -29,12 +31,6 @@ const MessageMap = new Map([
   [Mode.Scanning, "Tap the big square to cancel"],
   [Mode.Scanned, "Tap the big square to start over"],
 ])
-
-type Stats = {
-  frameCount: number
-  startTime: number
-  elapsedTime: number
-}
 
 const ZeroStats = {
   frameCount: 0,
@@ -130,6 +126,7 @@ export const App = () => {
           {renderFrameContent()}
         </Frame>
         {message && <Message message={message} />}
+        <StatsPanel stats={stats} />
       </StyledContent>
       <DiagnosticsSettingsButton
         diagnosticsSettings={diagnosticsSettings}
