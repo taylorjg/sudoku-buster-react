@@ -11,7 +11,8 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({ stats }) => {
   return (
     <StyledStatsPanel>
       <div>Frame count: {stats.frameCount}</div>
-      <div>Elapsed time: {(stats.elapsedTime/1000).toFixed(1)}s</div>
+      <div>Elapsed time: {(stats.elapsedTime / 1000).toFixed(1)}s</div>
+      <div>Frames per second: {stats.fps.toFixed(1)}</div>
     </StyledStatsPanel>
   )
 }

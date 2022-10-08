@@ -5,7 +5,10 @@ export type DiagnosticsSettings = {
 }
 
 export type Stats = {
-  frameCount: number
   startTime: number
   elapsedTime: number
+  frameCount: number
+  frameCountThisSecond: number
+  fpsTime: number
+  fps: number
 }

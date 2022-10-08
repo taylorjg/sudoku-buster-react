@@ -33,9 +33,12 @@ const MessageMap = new Map([
 ])
 
 const ZeroStats = {
-  frameCount: 0,
   startTime: 0,
-  elapsedTime: 0
+  elapsedTime: 0,
+  frameCount: 0,
+  frameCountThisSecond: 0,
+  fpsTime: 0,
+  fps: 0
 }
 
 export const App = () => {
@@ -74,11 +77,20 @@ export const App = () => {
   const onVideoFrame = (imageData: ImageData): void => {
     const processImageResult = processImage(imageData)
     setStats(currentStats => {
+      const { startTime, frameCount, frameCountThisSecond, fpsTime, fps} = currentStats
       const now = performance.now()
+      const elapsedTimeSinceLastFpsReset = now - fpsTime
+      const incrementedFrameCountThisSecond = frameCountThisSecond + 1
+      const [newFrameCountThisSecond, newFpsTime, newFps] = elapsedTimeSinceLastFpsReset >= 1000
+      ? [0, now, incrementedFrameCountThisSecond * 1000 / elapsedTimeSinceLastFpsReset]
+      : [incrementedFrameCountThisSecond, fpsTime, fps]
       return {
         ...currentStats,
-        frameCount: currentStats.frameCount + 1,
-        elapsedTime: Math.floor(now - currentStats.startTime)
+        elapsedTime: Math.floor(now - startTime),
+        frameCount: frameCount + 1,
+        frameCountThisSecond: newFrameCountThisSecond,
+        fpsTime: newFpsTime,
+        fps: newFps
       }
     })
     if (processImageResult?.solvedSudokuPuzzle) {
