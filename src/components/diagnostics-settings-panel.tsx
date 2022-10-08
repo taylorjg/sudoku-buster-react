@@ -1,5 +1,6 @@
-import { Drawer, FormControlLabel, Switch } from "@mui/material"
-import { StyledDiagnosticsSettingsPanel } from "./diagnostics-settings-panel.styles"
+import { Divider, Drawer, FormControlLabel, IconButton, Switch, Typography } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
+import { StyledPanelContent, StyledPanelTitle } from "./common-settings-panel.styles"
 import { DiagnosticsSettings } from "./types"
 
 export type DiagnosticsSettingsPanelProps = {
@@ -27,7 +28,16 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
 
   return (
     <Drawer anchor="bottom" open={isDrawerOpen} onClose={closeDrawer}>
-      <StyledDiagnosticsSettingsPanel>
+      <StyledPanelTitle>
+        <Typography variant="body1" fontWeight="500">
+          Diagnostics Settings
+        </Typography>
+        <IconButton color="inherit" onClick={closeDrawer} edge="end">
+          <CloseIcon color="primary" fontSize="small" />
+        </IconButton>
+      </StyledPanelTitle>
+      <Divider />
+      <StyledPanelContent>
         <FormControlLabel
           control={
             <Switch
@@ -58,7 +68,7 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
           }
           label="Show contour"
         />
-      </StyledDiagnosticsSettingsPanel>
+      </StyledPanelContent>
     </Drawer>
   )
 }

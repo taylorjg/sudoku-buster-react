@@ -1,5 +1,6 @@
-import { Drawer, FormControlLabel, FormGroup, Switch } from "@mui/material"
-import { StyledNerdyStatsSettingsPanel } from "./nerdy-stats-settings-panel.styles"
+import { Divider, Drawer, FormControlLabel, IconButton, FormGroup, Switch, Typography } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
+import { StyledPanelContent, StyledPanelTitle } from "./common-settings-panel.styles"
 import { NerdyStatsSettings } from "./types"
 
 export type NerdyStatsSettingsPanelProps = {
@@ -17,20 +18,29 @@ export const NerdyStatsSettingsPanel: React.FC<NerdyStatsSettingsPanelProps> = (
 }) => {
   return (
     <Drawer anchor="bottom" open={isDrawerOpen} onClose={closeDrawer}>
-      <StyledNerdyStatsSettingsPanel>
+      <StyledPanelTitle>
+        <Typography variant="body1" fontWeight="500">
+          Nerdy Stats Settings
+        </Typography>
+        <IconButton color="inherit" onClick={closeDrawer} edge="end">
+          <CloseIcon color="primary" fontSize="small" />
+        </IconButton>
+      </StyledPanelTitle>
+      <Divider />
+      <StyledPanelContent>
         <FormGroup>
           <FormControlLabel
             control={
               <Switch
                 size="small"
                 checked={nerdyStatsSettings.showNerdyStats}
-                onClick={() => onChange({ showNerdyStats: !nerdyStatsSettings.showNerdyStats})}
+                onClick={() => onChange({ showNerdyStats: !nerdyStatsSettings.showNerdyStats })}
               />
             }
             label="Show nerdy stats"
           />
         </FormGroup>
-      </StyledNerdyStatsSettingsPanel>
+      </StyledPanelContent>
     </Drawer>
   )
 }
