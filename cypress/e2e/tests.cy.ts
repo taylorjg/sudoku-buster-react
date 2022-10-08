@@ -58,7 +58,7 @@ describe("e2e tests", () => {
 
     it("should show bounding box during scanning when enabled", () => {
       openDiagnosticsPanel()
-      cy.findByText("Bounding Box").click({ force: true })
+      cy.findByText("Show bounding Box").click({ force: true })
       closeDiagnosticsPanel()
       clickFrame()
       cy.get("rect[fill=none]").should("have.attr", "stroke", "#0000FF")
@@ -67,7 +67,7 @@ describe("e2e tests", () => {
 
     it("should show corners during scanning when enabled", () => {
       openDiagnosticsPanel()
-      cy.findByText("Corners").click({ force: true })
+      cy.findByText("Show corners").click({ force: true })
       closeDiagnosticsPanel()
       clickFrame()
       cy.get("polygon[fill=none]").should("have.attr", "stroke", "#FF00FF")
@@ -76,7 +76,7 @@ describe("e2e tests", () => {
 
     it("should show contour during scanning when enabled", () => {
       openDiagnosticsPanel()
-      cy.findByText("Contour").click({ force: true })
+      cy.findByText("Show contour").click({ force: true })
       closeDiagnosticsPanel()
       clickFrame()
       cy.get("polygon[fill=none]").should("have.attr", "stroke", "#FF0000")

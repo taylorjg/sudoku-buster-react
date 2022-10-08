@@ -37,7 +37,7 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
                 onClick={makeClickHandler("showBoundingBox")}
               />
             }
-            label="Bounding Box"
+            label="Show bounding Box"
           />
           <FormControlLabel
             control={
@@ -47,7 +47,7 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
                 onClick={makeClickHandler("showCorners")}
               />
             }
-            label="Corners"
+            label="Show corners"
           />
           <FormControlLabel
             control={
@@ -57,7 +57,7 @@ export const DiagnosticsSettingsPanel: React.FC<DiagnosticsSettingsPanelProps> =
                 onClick={makeClickHandler("showContour")}
               />
             }
-            label="Contour"
+            label="Show contour"
           />
         </FormGroup>
       </StyledDiagnosticsSettingsPanel>

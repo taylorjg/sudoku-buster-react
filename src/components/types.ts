@@ -4,6 +4,10 @@ export type DiagnosticsSettings = {
   showContour: boolean
 }
 
+export type NerdyStatsSettings = {
+  showNerdyStats: boolean
+}
+
 export type Stats = {
   startTime: number
   elapsedTime: number

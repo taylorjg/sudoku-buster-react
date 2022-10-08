@@ -14,9 +14,9 @@ import { Sudoku } from "components/sudoku"
 import { Message } from "components/message"
 import { StatsPanel } from "components/stats-panel"
 import { DiagnosticsSettingsButton } from "components/diagnostics-settings-button"
-import { NerdyStatsButton } from "components/nerdy-stats-button"
+import { NerdyStatsSettingsButton } from "components/nerdy-stats-settings-button"
 
-import { Stats } from "components/types"
+import { DiagnosticsSettings, NerdyStatsSettings, Stats } from "components/types"
 import { useProcessImage } from "./use-process-image"
 import { GlobalStyles, StyledContent } from "./App.styles"
 
@@ -46,10 +46,13 @@ export const App = () => {
   const [findBoundingBoxResult, setFindBoundingBoxResult] = useState<FindBoundingBoxResult | undefined>()
   const [solvedSudokuPuzzle, setSolvedSudokuPuzzle] = useState<SolvedSudokuPuzzle | undefined>()
   const [stats, setStats] = useState<Stats>(ZeroStats)
-  const [diagnosticsSettings, setDiagnosticsSettings] = useState({
+  const [diagnosticsSettings, setDiagnosticsSettings] = useState<DiagnosticsSettings>({
     showBoundingBox: false,
     showCorners: false,
     showContour: false
+  })
+  const [nerdyStatsSettings, setNerdyStatsSettings] = useState<NerdyStatsSettings>({
+    showNerdyStats: false
   })
   const message = MessageMap.get(mode)
   const { processImage } = useProcessImage()
@@ -77,13 +80,13 @@ export const App = () => {
   const onVideoFrame = (imageData: ImageData): void => {
     const processImageResult = processImage(imageData)
     setStats(currentStats => {
-      const { startTime, frameCount, frameCountThisSecond, fpsTime, fps} = currentStats
+      const { startTime, frameCount, frameCountThisSecond, fpsTime, fps } = currentStats
       const now = performance.now()
       const elapsedTimeSinceLastFpsReset = now - fpsTime
       const incrementedFrameCountThisSecond = frameCountThisSecond + 1
       const [newFrameCountThisSecond, newFpsTime, newFps] = elapsedTimeSinceLastFpsReset >= 1000
-      ? [0, now, incrementedFrameCountThisSecond * 1000 / elapsedTimeSinceLastFpsReset]
-      : [incrementedFrameCountThisSecond, fpsTime, fps]
+        ? [0, now, incrementedFrameCountThisSecond * 1000 / elapsedTimeSinceLastFpsReset]
+        : [incrementedFrameCountThisSecond, fpsTime, fps]
       return {
         ...currentStats,
         elapsedTime: Math.floor(now - startTime),
@@ -138,13 +141,16 @@ export const App = () => {
           {renderFrameContent()}
         </Frame>
         {message && <Message message={message} />}
-        <StatsPanel stats={stats} />
+        <StatsPanel nerdyStatsSettings={nerdyStatsSettings} stats={stats} />
       </StyledContent>
       <DiagnosticsSettingsButton
         diagnosticsSettings={diagnosticsSettings}
         onChange={setDiagnosticsSettings}
       />
-      <NerdyStatsButton />
+      <NerdyStatsSettingsButton
+        nerdyStatsSettings={nerdyStatsSettings}
+        onChange={setNerdyStatsSettings}
+      />
     </ToastProvider>
   )
 }

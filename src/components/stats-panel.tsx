@@ -1,12 +1,14 @@
 import React from "react"
-import { Stats } from "./types"
+import { NerdyStatsSettings, Stats } from "./types"
 import { StyledStatsPanel } from "./stats-panel.styles"
 
 export type StatsPanelProps = {
+  nerdyStatsSettings: NerdyStatsSettings
   stats: Stats
 }
 
-export const StatsPanel: React.FC<StatsPanelProps> = ({ stats }) => {
+export const StatsPanel: React.FC<StatsPanelProps> = ({ nerdyStatsSettings, stats }) => {
+  if (!nerdyStatsSettings.showNerdyStats) return null
   if (stats.frameCount === 0) return null
   return (
     <StyledStatsPanel>
