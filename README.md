@@ -1,4 +1,4 @@
-![CI workflow](https://github.com/taylorjg/sudoku-buster-react/actions/workflows/ci.yml/badge.svg)
+![CI workflow badge](https://github.com/taylorjg/sudoku-buster-react/actions/workflows/ci.yml/badge.svg)
 
 # Description
 
