@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { CssBaseline } from "@mui/material"
 import { Global } from "@emotion/react"
 
@@ -72,10 +72,6 @@ export const App = () => {
   const onCameraNotAvailable = (): void => {
     setMode(Mode.Initial)
   }
-
-  useEffect(() => {
-    console.log(JSON.stringify(stats))
-  }, [stats])
 
   const onVideoFrame = (imageData: ImageData): void => {
     const processImageResult = processImage(imageData)
