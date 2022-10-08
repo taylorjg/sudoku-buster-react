@@ -1,3 +1,5 @@
+![CI workflow](https://github.com/taylorjg/sudoku-buster-react/actions/workflows/ci.yml/badge.svg)
+
 # Description
 
 The aim of this project is to rewrite my earlier 
